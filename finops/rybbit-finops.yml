@@ -1,0 +1,99 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Rybbit
+providerId: rybbit
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Analytics
+- Web Analytics
+- Product Analytics
+- Privacy
+- Open Source
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Rybbit spend. Rybbit has two cost models. Self-hosting the
+  open-source (AGPL-3.0) edition shifts cost to infrastructure (compute,
+  ClickHouse storage, bandwidth) with no per-event licensing. Rybbit Cloud
+  is usage-based, metered primarily by monthly pageviews (an event is a
+  pageview or custom event), billed as a monthly subscription whose price
+  scales with the included pageview allowance across the Free, Standard,
+  Pro, and Enterprise plans.
+notes: >-
+  Cloud pricing scales with pageview volume via a slider on the Standard and
+  Pro plans; verify current bracket prices on the Rybbit pricing page during
+  reconciliation. Self-hosted cost is entirely infrastructure-side.
+sources:
+- https://rybbit.com/pricing
+- https://rybbit.com/docs/self-host-vs-cloud
+- https://github.com/rybbit-io/rybbit
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Rybbit
+serviceCategory: Analytics
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+focusColumns:
+  ServiceName: Rybbit Cloud
+  ServiceCategory: Analytics
+  ProviderName: Rybbit
+  PublisherName: Rybbit
+  InvoiceIssuerName: Rybbit
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: monthly_pageviews
+  description: Pageviews ingested per month; the primary metered unit on Rybbit Cloud plans.
+  unit: pageviews
+  aggregation: sum
+  dimensions:
+  - account
+  - site
+- name: custom_events
+  description: Custom events ingested per month; counted toward the monthly event allowance.
+  unit: events
+  aggregation: sum
+  dimensions:
+  - account
+  - site
+- name: data_retention
+  description: Length of historical data retained, which varies by plan (6 months to infinite).
+  unit: months
+  aggregation: max
+  dimensions:
+  - account
+  - plan
+- name: self_hosted_infrastructure
+  description: Compute, ClickHouse storage, and bandwidth costs for self-hosted (AGPL-3.0) deployments.
+  unit: infrastructure
+  aggregation: sum
+  dimensions:
+  - account
+  - resource
+principles:
+- name: Visibility
+  description: Track monthly pageview/event volume per site against the plan allowance to anticipate slider-driven price changes.
+- name: Allocation
+  description: Map sites and team members to internal teams; on cloud, allocate the subscription across the sites it covers.
+- name: Optimization
+  description: Self-host the AGPL-3.0 edition to trade subscription cost for controlled infrastructure cost; right-size data retention to plan needs; filter bots to avoid wasted pageview volume.
+- name: Accountability
+  description: Assign an owner per site/organization and review pageview burn and plan bracket monthly.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

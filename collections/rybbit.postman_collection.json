@@ -1,0 +1,285 @@
+{
+  "info": {
+    "name": "Rybbit API",
+    "description": "Rybbit open-source, privacy-friendly web and product analytics API: the public /api/track ingestion endpoint plus the Bearer-key-authenticated Stats API (beta) for sessions, users, retention, and journeys. Cloud base URL https://app.rybbit.io; self-hosted instances expose the same paths.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://app.rybbit.io",
+      "type": "string"
+    },
+    {
+      "key": "site",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Event Tracking",
+      "item": [
+        {
+          "name": "Send a pageview or custom event.",
+          "request": {
+            "method": "POST",
+            "auth": {
+              "type": "noauth"
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/track",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "track"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"site_id\": \"<string>\",\n  \"type\": \"custom_event\",\n  \"event_name\": \"<string>\",\n  \"hostname\": \"<string>\",\n  \"pathname\": \"<string>\",\n  \"page_title\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"language\": \"<string>\",\n  \"screenWidth\": 0,\n  \"screenHeight\": 0,\n  \"properties\": \"{}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Public ingestion endpoint used by the tracking script and server-side integrations. No API key is required for basic tracking; the server resolves the site by site_id and applies rate limiting."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sessions",
+      "item": [
+        {
+          "name": "List sessions for a site.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/sessions?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Returns a paginated list of sessions with their analytics data."
+          }
+        },
+        {
+          "name": "Get a single session.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/sessions/:sessionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "sessions",
+                ":sessionId"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Returns session-level detail including the ordered list of pageviews and events."
+          }
+        },
+        {
+          "name": "List session locations.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/session-locations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "session-locations"
+              ]
+            },
+            "description": "Returns geographic location data for sessions, suitable for map visualizations."
+          }
+        },
+        {
+          "name": "Get cohort retention.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/retention",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "retention"
+              ]
+            },
+            "description": "Returns cohort-based retention analysis. Users are grouped into cohorts by first visit and retention is tracked over subsequent periods."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analytics",
+      "item": [
+        {
+          "name": "List users for a site.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "users"
+              ]
+            },
+            "description": "Returns a list of users for the site."
+          }
+        },
+        {
+          "name": "Get a single user.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/users/:userId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "users",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Returns detail for a single user."
+          }
+        },
+        {
+          "name": "List sessions for a user.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/users/:userId/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "users",
+                ":userId",
+                "sessions"
+              ],
+              "variable": [
+                {
+                  "key": "userId",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Returns the session history for a single user."
+          }
+        },
+        {
+          "name": "Get per-user session counts.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/users/session-count",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "users",
+                "session-count"
+              ]
+            },
+            "description": "Returns session counts grouped by user."
+          }
+        },
+        {
+          "name": "Get user journeys.",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sites/{{site}}/journeys",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "sites",
+                "{{site}}",
+                "journeys"
+              ]
+            },
+            "description": "Returns common navigation paths (journeys) users take through the site."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+aid: rybbit
+name: Rybbit
+review:
+  question: Does Rybbit expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. Rybbit's documented surface is entirely
+    HTTP/REST: a public ingestion endpoint (POST /api/track) and a
+    Bearer-key-authenticated Stats API under /api/sites/:site. No streaming,
+    Server-Sent Events, or WebSocket transport is documented, so there is no
+    event-driven surface in scope for AsyncAPI modeling at review time.
+findings:
+  summary: |
+    Rybbit does not publish a documented public WebSocket API. The platform
+    is an open-source (AGPL-3.0) web and product analytics tool, available
+    self-hosted or as Rybbit Cloud (https://app.rybbit.io). Event collection
+    happens over a single HTTP POST to /api/track from the tracking script
+    (loaded from /api/script.js) or server-side integrations. Reporting is
+    a REST Stats API (beta) under /api/sites/:site, authenticated with a
+    Bearer API key (rb_ prefix, 35 chars) or an ?api_key= query parameter
+    for testing. No realtime, bidirectional, or push (ws:// or wss://)
+    endpoint is documented.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://app.rybbit.io/api
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No WebSocket endpoint is documented in Rybbit's API reference, tracking script docs, or repository as of the review date.
+  endpointsConfirmedRest:
+    - POST https://app.rybbit.io/api/track
+    - GET  https://app.rybbit.io/api/sites/{site}/sessions
+    - GET  https://app.rybbit.io/api/sites/{site}/sessions/{sessionId}
+    - GET  https://app.rybbit.io/api/sites/{site}/session-locations
+    - GET  https://app.rybbit.io/api/sites/{site}/users
+    - GET  https://app.rybbit.io/api/sites/{site}/users/{userId}
+    - GET  https://app.rybbit.io/api/sites/{site}/users/{userId}/sessions
+    - GET  https://app.rybbit.io/api/sites/{site}/users/session-count
+    - GET  https://app.rybbit.io/api/sites/{site}/retention
+    - GET  https://app.rybbit.io/api/sites/{site}/journeys
+  ossVsCloud:
+    - aspect: License
+      oss: AGPL-3.0, self-host free for personal or business use
+      cloud: Managed service at app.rybbit.io with Free/Standard/Pro/Enterprise plans
+    - aspect: Rate limits
+      oss: None
+      cloud: Stats API limited per plan (Standard 20 rpm, Pro 200 rpm)
+    - aspect: Stack
+      oss: TypeScript/Node.js server + ClickHouse + React client, Docker Compose
+      cloud: Same platform, hosted by Rybbit
+sources:
+  - url: https://rybbit.com/docs/api/getting-started
+    type: Documentation
+    note: Stats API auth (Bearer rb_ key), categories, and cloud rate limits; all endpoints are HTTPS REST.
+  - url: https://rybbit.com/docs/api/stats/sessions
+    type: APIReference
+    note: Documents GET /api/sites/:site/sessions and related session endpoints.
+  - url: https://rybbit.com/docs/api/sending-events
+    type: Documentation
+    note: POST /api/track ingestion payload; no WebSocket transport.
+  - url: https://rybbit.com/docs/script
+    type: Documentation
+    note: Tracking script loaded from /api/script.js posting to the ingestion endpoint over HTTPS.
+  - url: https://github.com/rybbit-io/rybbit
+    type: SourceCode
+    note: AGPL-3.0 TypeScript server with ClickHouse; no documented WebSocket surface.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket or other event-driven transport surface exists in Rybbit's
+    documentation or repository. The catalog models the documented REST
+    ingestion and Stats endpoints via OpenAPI; no AsyncAPI document was
+    authored because no streaming/WebSocket surface is documented.

@@ -1,0 +1,65 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Rybbit
+providerId: rybbit
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Analytics
+- Web Analytics
+- Product Analytics
+- Privacy
+- Open Source
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Rybbit applies API rate limits only on Rybbit Cloud and only to the Stats
+  (read) API. Limits are per-plan: the Standard plan allows 20 requests per
+  minute and the Pro plan allows 200 requests per minute (10x). Self-hosted
+  instances have no rate limits. Exceeding a limit returns HTTP 429. The
+  ingestion endpoint (POST /api/track) is governed by per-site ingestion
+  controls rather than the published Stats API per-minute limits.
+notes: >-
+  Stats API rate limits apply to cloud plans only; self-hosted deployments
+  are unthrottled. Verify current per-plan request-per-minute values on the
+  Rybbit API getting-started documentation during reconciliation.
+sources:
+- https://rybbit.com/docs/api/getting-started
+- https://rybbit.com/pricing
+- https://rybbit.com/docs/self-host-vs-cloud
+responseCodes:
+  throttled: 429
+limits:
+- name: Stats API - Standard Plan
+  scope: account
+  metric: requests
+  limit: 20 per minute
+  notes: Cloud Standard plan Stats API request rate.
+- name: Stats API - Pro Plan
+  scope: account
+  metric: requests
+  limit: 200 per minute
+  notes: Cloud Pro plan Stats API request rate (10x Standard).
+- name: Stats API - Self-Hosted
+  scope: instance
+  metric: requests
+  limit: unlimited
+  notes: Self-hosted (AGPL-3.0) instances enforce no API rate limits.
+- name: Ingestion (/api/track)
+  scope: site
+  metric: events
+  limit: per-site ingestion controls
+  notes: Tracking ingestion is rate-controlled per site, distinct from Stats API per-minute limits.
+policies:
+- name: Plan-Tiered Limits
+  description: Cloud Stats API limits scale from Standard (20 rpm) to Pro (200 rpm); Enterprise is negotiated.
+- name: Self-Host Exemption
+  description: Open-source self-hosted deployments are not rate limited.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor 429 responses.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,155 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Rybbit
+providerId: rybbit
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Analytics
+- Web Analytics
+- Product Analytics
+- Privacy
+- Open Source
+- Plans
+description: >-
+  Rybbit offers two consumption models. The open-source edition (AGPL-3.0)
+  is free to self-host for personal or business use with no event caps or
+  rate limits. Rybbit Cloud is a managed, usage-based offering metered by
+  monthly pageviews (an "event" is a pageview or a custom event), with a
+  free tier and paid Standard, Pro, and Enterprise plans. Paid plans scale
+  the included pageview allowance (from 100K up to 20M+) along the same
+  monthly base price brackets.
+notes: >-
+  Pageview allowances and prices are the entry points published on the
+  Rybbit pricing page; the Standard and Pro plans use a slider that raises
+  the monthly price as the included pageview volume increases. Verify exact
+  bracket pricing on the pricing page during reconciliation.
+sources:
+- https://rybbit.com/pricing
+- https://rybbit.com/docs/self-host-vs-cloud
+- https://github.com/rybbit-io/rybbit
+plans:
+- id: rybbit-self-hosted
+  name: Self-Hosted (Open Source)
+  type: free
+  description: >-
+    The full open-source platform under AGPL-3.0, self-hosted on your own
+    infrastructure. No event caps and no API rate limits. Free for personal
+    and business use.
+  entries:
+  - label: Pageviews / Events
+    name: self_hosted_events
+    type: free
+    metric: events
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: free (self-hosted, AGPL-3.0)
+    userMultiplied: false
+  elements:
+  - name: Core Analytics Dashboard
+  - name: Custom Events
+  - name: Stats API
+  - name: Unlimited Sites
+  - name: No Rate Limits
+- id: rybbit-free
+  name: Free (Cloud)
+  type: free
+  description: >-
+    Managed cloud free tier with no credit card required.
+  entries:
+  - label: Included Pageviews
+    name: free_pageviews
+    type: free
+    metric: pageviews
+    limit: 3000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: $0
+    userMultiplied: false
+  elements:
+  - name: 1 Website
+  - name: Core Analytics Dashboard
+  - name: Custom Events
+  - name: 6 Months Data Retention
+- id: rybbit-standard
+  name: Standard (Cloud)
+  type: paid
+  description: >-
+    Entry paid cloud plan starting at $13/month for 100K monthly pageviews,
+    scaling up via a pageview slider.
+  entries:
+  - label: Included Pageviews
+    name: standard_pageviews
+    type: usage
+    metric: pageviews
+    limit: 100000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: from $13/month (scales with pageview volume)
+    userMultiplied: false
+  elements:
+  - name: Up to 5 Websites
+  - name: Up to 3 Team Members
+  - name: 3 Years Data Retention
+  - name: Funnels, Goals, Journeys
+  - name: Web Vitals
+  - name: Bot Filtering
+  - name: Error Tracking
+  - name: 20 requests/min API rate limit
+- id: rybbit-pro
+  name: Pro (Cloud)
+  type: paid
+  description: >-
+    Recommended paid cloud plan starting at $26/month for 100K monthly
+    pageviews, scaling up via a pageview slider.
+  entries:
+  - label: Included Pageviews
+    name: pro_pageviews
+    type: usage
+    metric: pageviews
+    limit: 100000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: from $26/month (scales with pageview volume)
+    userMultiplied: false
+  elements:
+  - name: Unlimited Websites
+  - name: Unlimited Team Members
+  - name: 5 Years Data Retention
+  - name: Session Replays
+  - name: 200 requests/min API rate limit (10x)
+  - name: Priority Support
+- id: rybbit-enterprise
+  name: Enterprise (Cloud)
+  type: enterprise
+  description: >-
+    Custom plan with negotiated pageview volume, isolated deployment, and
+    additional governance features. Contact Rybbit sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Pageview Volume
+  - name: Infinite Data Retention
+  - name: Single Sign-On (SSO)
+  - name: Dedicated Isolated Instance
+  - name: On-Premise Installation
+  - name: Whitelabeling
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
