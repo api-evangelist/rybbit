@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: searched
+probe: true
+source: https://rybbit.com/security
+url: https://rybbit.com/security
+certifications:
+- ISO 27001
+- PCI DSS
+- GDPR
+evidence:
+- source: https://rybbit.com/security
+  keywords:
+  - iso 27001
+  - pci dss
+  - gdpr

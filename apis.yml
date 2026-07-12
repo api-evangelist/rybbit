@@ -114,6 +114,16 @@ apis:
     lists, individual session detail, session locations, per-user session
     history, and cohort-based retention curves under /api/sites/:site.
 common:
+- type: TrustCenter
+  url: security/rybbit-trust-center.yml
+- type: VulnerabilityDisclosure
+  url: security/rybbit-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/rybbit-domain-security.yml
+- type: Authentication
+  url: authentication/rybbit-authentication.yml
+- url: https://rybbit.io/blog
+  type: Blog
 - type: GitHubOrganization
   url: https://github.com/rybbit-io
 - type: LinkedIn
