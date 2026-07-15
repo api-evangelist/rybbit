@@ -114,6 +114,8 @@ apis:
     lists, individual session detail, session locations, per-user session
     history, and cohort-based retention curves under /api/sites/:site.
 common:
+- type: AgenticAccess
+  url: agentic-access/rybbit-agentic-access.yml
 - type: TrustCenter
   url: security/rybbit-trust-center.yml
 - type: VulnerabilityDisclosure
