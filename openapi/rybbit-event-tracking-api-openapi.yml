@@ -1,0 +1,91 @@
+openapi: 3.0.1
+info:
+  title: Rybbit Analytics Event Tracking API
+  description: Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.
+  termsOfService: https://www.rybbit.io/terms
+  contact:
+    name: Rybbit
+    url: https://www.rybbit.io
+  license:
+    name: AGPL-3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.html
+  version: '1.0'
+servers:
+- url: https://app.rybbit.io
+  description: Rybbit Cloud
+- url: https://your-instance.example.com
+  description: Self-hosted instance (AGPL-3.0)
+security:
+- bearerAuth: []
+tags:
+- name: Event Tracking
+  description: Public ingestion endpoint for pageviews and custom events.
+paths:
+  /api/track:
+    post:
+      operationId: trackEvent
+      tags:
+      - Event Tracking
+      summary: Send a pageview or custom event.
+      description: Public ingestion endpoint used by the Rybbit tracking script and server-side / mobile integrations. No API key is required for basic tracking; the server validates the payload, resolves the site by site_id, and applies rate limiting. The `type` field selects the event kind (pageview, custom_event, or outbound).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackRequest'
+      responses:
+        '200':
+          description: Event accepted.
+        '400':
+          description: Bad Request - payload failed validation.
+        '429':
+          description: Too Many Requests - rate limit exceeded.
+components:
+  schemas:
+    TrackRequest:
+      type: object
+      required:
+      - site_id
+      - type
+      properties:
+        site_id:
+          type: string
+          description: The Rybbit site identifier the event belongs to.
+        type:
+          type: string
+          enum:
+          - pageview
+          - custom_event
+          - outbound
+          description: The kind of event being recorded.
+        event_name:
+          type: string
+          description: Name of the custom event (required for custom_event).
+        hostname:
+          type: string
+        pathname:
+          type: string
+        querystring:
+          type: string
+        page_title:
+          type: string
+        referrer:
+          type: string
+        language:
+          type: string
+        screenWidth:
+          type: integer
+        screenHeight:
+          type: integer
+        user_agent:
+          type: string
+        properties:
+          type: string
+          description: JSON-encoded string of custom event properties.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User-scoped API key with organization-level access. Keys begin with "rb_" and are 35 characters long. Send as `Authorization: Bearer rb_...`. A `?api_key=` query parameter is also accepted for quick testing only. API keys and rate limits apply to the Stats API on Rybbit Cloud; self-hosted instances have no rate limits.'

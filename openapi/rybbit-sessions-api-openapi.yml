@@ -1,0 +1,212 @@
+openapi: 3.0.1
+info:
+  title: Rybbit Analytics Sessions API
+  description: Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.
+  termsOfService: https://www.rybbit.io/terms
+  contact:
+    name: Rybbit
+    url: https://www.rybbit.io
+  license:
+    name: AGPL-3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.html
+  version: '1.0'
+servers:
+- url: https://app.rybbit.io
+  description: Rybbit Cloud
+- url: https://your-instance.example.com
+  description: Self-hosted instance (AGPL-3.0)
+security:
+- bearerAuth: []
+tags:
+- name: Sessions
+  description: Session-level analytics and cohort retention.
+paths:
+  /api/sites/{site}/sessions:
+    get:
+      operationId: listSessions
+      tags:
+      - Sessions
+      summary: List sessions for a site.
+      description: Returns a paginated list of sessions with their analytics data.
+      parameters:
+      - $ref: '#/components/parameters/Site'
+      - name: page
+        in: query
+        schema:
+          type: integer
+          default: 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 20
+      - name: start_date
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: end_date
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: time_zone
+        in: query
+        schema:
+          type: string
+      - name: user_id
+        in: query
+        schema:
+          type: string
+      - name: identified_only
+        in: query
+        schema:
+          type: boolean
+      - $ref: '#/components/parameters/Filters'
+      responses:
+        '200':
+          description: A paginated list of sessions.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Session'
+        '401':
+          description: Unauthorized - missing or invalid API key.
+        '403':
+          description: Forbidden - no access to site.
+  /api/sites/{site}/sessions/{sessionId}:
+    get:
+      operationId: getSession
+      tags:
+      - Sessions
+      summary: Get a single session.
+      description: Returns session-level detail including the ordered list of pageviews and events.
+      parameters:
+      - $ref: '#/components/parameters/Site'
+      - name: sessionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Session detail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Session'
+        '404':
+          description: Not Found.
+  /api/sites/{site}/session-locations:
+    get:
+      operationId: listSessionLocations
+      tags:
+      - Sessions
+      summary: List session locations.
+      description: Returns geographic location data for sessions, suitable for map visualizations.
+      parameters:
+      - $ref: '#/components/parameters/Site'
+      - $ref: '#/components/parameters/Filters'
+      responses:
+        '200':
+          description: Session location data.
+  /api/sites/{site}/retention:
+    get:
+      operationId: getRetention
+      tags:
+      - Sessions
+      summary: Get cohort retention.
+      description: Returns cohort-based retention analysis. Users are grouped into cohorts by first visit and retention is tracked over subsequent time periods.
+      parameters:
+      - $ref: '#/components/parameters/Site'
+      - name: start_date
+        in: query
+        schema:
+          type: string
+          format: date
+      - name: end_date
+        in: query
+        schema:
+          type: string
+          format: date
+      - $ref: '#/components/parameters/Filters'
+      responses:
+        '200':
+          description: Cohort retention data.
+components:
+  parameters:
+    Filters:
+      name: filters
+      in: query
+      required: false
+      description: JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties.
+      schema:
+        type: string
+    Site:
+      name: site
+      in: path
+      required: true
+      description: The site ID (string or number) scoping the query.
+      schema:
+        type: string
+  schemas:
+    Session:
+      type: object
+      properties:
+        session_id:
+          type: string
+        user_id:
+          type: string
+        identified_user_id:
+          type: string
+        traits:
+          type: object
+          additionalProperties: true
+        country:
+          type: string
+        region:
+          type: string
+        city:
+          type: string
+        browser:
+          type: string
+        operating_system:
+          type: string
+        device_type:
+          type: string
+        referrer:
+          type: string
+        channel:
+          type: string
+        entry_page:
+          type: string
+        exit_page:
+          type: string
+        pageviews:
+          type: integer
+        events:
+          type: integer
+        session_duration:
+          type: number
+        session_start:
+          type: string
+          format: date-time
+        session_end:
+          type: string
+          format: date-time
+        utm_source:
+          type: string
+        utm_medium:
+          type: string
+        utm_campaign:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: 'User-scoped API key with organization-level access. Keys begin with "rb_" and are 35 characters long. Send as `Authorization: Bearer rb_...`. A `?api_key=` query parameter is also accepted for quick testing only. API keys and rate limits apply to the Stats API on Rybbit Cloud; self-hosted instances have no rate limits.'
