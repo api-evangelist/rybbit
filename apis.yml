@@ -8,7 +8,20 @@ description: Rybbit is an open-source, privacy-friendly web and product analytic
   HTTP /api/track endpoint, and exposes a Bearer-key-authenticated Stats API for
   sites, sessions, users, retention, and events. Rybbit can be self-hosted under
   AGPL-3.0 or consumed as a managed cloud service.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/rybbit.png
 tags:
 - Analytics
 - Web Analytics
@@ -20,99 +33,78 @@ created: '2026-06-21'
 modified: '2026-06-21'
 specificationVersion: '0.19'
 apis:
-- aid: rybbit:rybbit-event-tracking-api
-  name: Rybbit Event Tracking API
-  tags:
-  - Event Tracking
-  - Ingestion
-  - Pageviews
-  - Custom Events
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: rybbit:rybbit-analytics-api
+  name: Rybbit Analytics API
+  description: Stats API for events and reporting per site.
   humanURL: https://rybbit.com/docs/api/sending-events
   baseURL: https://app.rybbit.io/api
-  properties:
-  - url: https://rybbit.com/docs/api/sending-events
-    type: Documentation
-  - url: https://rybbit.com/docs/script
-    type: Documentation
-  - url: openapi/rybbit-openapi.yml
-    type: OpenAPI
-  - url: collections/rybbit.postman_collection.json
-    type: PostmanCollection
-  - url: collections/rybbit.opencollection.json
-    type: OpenCollection
-  description: Public ingestion endpoint (POST /api/track) used by the Rybbit
-    tracking script and server-side integrations to send pageviews, custom events,
-    and outbound link events. Accepts site_id, event type, page context, and a
-    JSON properties payload; no API key is required for basic tracking.
-- aid: rybbit:rybbit-sites-api
-  name: Rybbit Sites API
-  tags:
-  - Sites
-  - Management
-  - Organizations
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://rybbit.com/docs/api/getting-started
-  baseURL: https://app.rybbit.io/api
-  properties:
-  - url: https://rybbit.com/docs/api/getting-started
-    type: Documentation
-  - url: openapi/rybbit-openapi.yml
-    type: OpenAPI
-  - url: collections/rybbit.postman_collection.json
-    type: PostmanCollection
-  - url: collections/rybbit.opencollection.json
-    type: OpenCollection
-  description: Management endpoints for organizations and sites that scope all
-    analytics queries. Sites are addressed by site ID in the /api/sites/:site
-    path prefix used across the Stats API.
-- aid: rybbit:rybbit-analytics-stats-api
-  name: Rybbit Analytics Stats API
   tags:
   - Analytics
-  - Stats
-  - Events
-  - Reporting
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://rybbit.com/docs/api/getting-started
-  baseURL: https://app.rybbit.io/api
   properties:
-  - url: https://rybbit.com/docs/api/getting-started
-    type: Documentation
-  - url: https://rybbit.com/docs/api/stats/misc
-    type: APIReference
-  - url: openapi/rybbit-openapi.yml
-    type: OpenAPI
-  - url: collections/rybbit.postman_collection.json
-    type: PostmanCollection
-  - url: collections/rybbit.opencollection.json
-    type: OpenCollection
-  description: Bearer-key-authenticated read API (beta) for querying analytics
-    per site - events, users, journeys, and supporting stats - under the
-    /api/sites/:site path. Supports date-range or relative time parameters and a
-    JSON-encoded filters array.
-- aid: rybbit:rybbit-sessions-retention-api
-  name: Rybbit Sessions & Retention API
+  - type: OpenAPI
+    url: openapi/rybbit-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://rybbit.com/docs/api/sending-events
+  - type: Documentation
+    url: https://rybbit.com/docs/script
+  - type: PostmanCollection
+    url: collections/rybbit.postman_collection.json
+  - type: OpenCollection
+    url: collections/rybbit.opencollection.json
+  - type: Documentation
+    url: https://rybbit.com/docs/api/getting-started
+  - type: APIReference
+    url: https://rybbit.com/docs/api/stats/misc
+  - type: Documentation
+    url: https://rybbit.com/docs/api/stats/sessions
+- aid: rybbit:rybbit-event-tracking-api
+  name: Rybbit Event Tracking API
+  description: Public ingestion endpoint for pageviews and custom events.
+  humanURL: https://rybbit.com/docs/api/sending-events
+  baseURL: https://app.rybbit.io/api
+  tags:
+  - Event Tracking
+  properties:
+  - type: OpenAPI
+    url: openapi/rybbit-event-tracking-api-openapi.yml
+  - type: Documentation
+    url: https://rybbit.com/docs/api/sending-events
+  - type: Documentation
+    url: https://rybbit.com/docs/script
+  - type: PostmanCollection
+    url: collections/rybbit.postman_collection.json
+  - type: OpenCollection
+    url: collections/rybbit.opencollection.json
+  - type: Documentation
+    url: https://rybbit.com/docs/api/getting-started
+  - type: APIReference
+    url: https://rybbit.com/docs/api/stats/misc
+  - type: Documentation
+    url: https://rybbit.com/docs/api/stats/sessions
+- aid: rybbit:rybbit-sessions-api
+  name: Rybbit Sessions API
+  description: Session-level analytics and cohort retention.
+  humanURL: https://rybbit.com/docs/api/sending-events
+  baseURL: https://app.rybbit.io/api
   tags:
   - Sessions
-  - Retention
-  - Cohorts
-  - Users
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://rybbit.com/docs/api/stats/sessions
-  baseURL: https://app.rybbit.io/api
   properties:
-  - url: https://rybbit.com/docs/api/stats/sessions
-    type: Documentation
-  - url: openapi/rybbit-openapi.yml
-    type: OpenAPI
-  - url: collections/rybbit.postman_collection.json
-    type: PostmanCollection
-  - url: collections/rybbit.opencollection.json
-    type: OpenCollection
-  description: Session-level analytics and cohort retention - paginated session
-    lists, individual session detail, session locations, per-user session
-    history, and cohort-based retention curves under /api/sites/:site.
+  - type: OpenAPI
+    url: openapi/rybbit-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://rybbit.com/docs/api/sending-events
+  - type: Documentation
+    url: https://rybbit.com/docs/script
+  - type: PostmanCollection
+    url: collections/rybbit.postman_collection.json
+  - type: OpenCollection
+    url: collections/rybbit.opencollection.json
+  - type: Documentation
+    url: https://rybbit.com/docs/api/getting-started
+  - type: APIReference
+    url: https://rybbit.com/docs/api/stats/misc
+  - type: Documentation
+    url: https://rybbit.com/docs/api/stats/sessions
 common:
 - type: AgenticAccess
   url: agentic-access/rybbit-agentic-access.yml
