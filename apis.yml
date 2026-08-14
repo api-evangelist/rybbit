@@ -4,14 +4,20 @@ name: Rybbit
 kind: company
 description: Rybbit is an open-source, privacy-friendly web and product analytics
   platform positioned as a cookieless alternative to Google Analytics and Plausible.
-  It ingests pageviews and custom events through a lightweight tracking script and
-  HTTP /api/track endpoint, and exposes a Bearer-key-authenticated Stats API for
-  sites, sessions, users, retention, and events. Rybbit can be self-hosted under
-  AGPL-3.0 or consumed as a managed cloud service.
+  It ingests pageviews, custom events, autocaptured interactions, performance samples
+  and JavaScript errors through a lightweight tracking script and an HTTP /api/track
+  endpoint, and exposes a Bearer-key-authenticated Stats and Management API covering
+  sites, sessions, users, goals, funnels, web vitals, session replays, organizations
+  and teams. Since v2.8.0 Rybbit also runs a first-party hosted Model Context Protocol
+  server at https://app.rybbit.io/api/mcp — 38 tools behind an OAuth 2.1 authorization
+  server with PKCE, dynamic client registration and a 29-scope resource:action
+  permission model — making it directly callable by AI agents. Rybbit publishes no
+  OpenAPI. It can be self-hosted under AGPL-3.0, which ships the identical REST and
+  MCP surface, or consumed as a managed cloud service.
 accessModel:
   pricing: freemium
   onboarding: self-serve
-  trial: false
+  trial: true
   try_now: true
   public: false
   label: Freemium · Self-serve signup
@@ -30,13 +36,13 @@ tags:
 - Open Source
 - Cookieless
 created: '2026-06-21'
-modified: '2026-06-21'
+modified: '2026-08-13'
 specificationVersion: '0.19'
 apis:
 - aid: rybbit:rybbit-analytics-api
   name: Rybbit Analytics API
   description: Stats API for events and reporting per site.
-  humanURL: https://rybbit.com/docs/api/sending-events
+  humanURL: https://rybbit.com/docs/api/getting-started
   baseURL: https://app.rybbit.io/api
   tags:
   - Analytics
@@ -54,9 +60,9 @@ apis:
   - type: Documentation
     url: https://rybbit.com/docs/api/getting-started
   - type: APIReference
-    url: https://rybbit.com/docs/api/stats/misc
+    url: https://rybbit.com/docs/api/getting-started
   - type: Documentation
-    url: https://rybbit.com/docs/api/stats/sessions
+    url: https://rybbit.com/docs/api/sessions/list
 - aid: rybbit:rybbit-event-tracking-api
   name: Rybbit Event Tracking API
   description: Public ingestion endpoint for pageviews and custom events.
@@ -78,13 +84,13 @@ apis:
   - type: Documentation
     url: https://rybbit.com/docs/api/getting-started
   - type: APIReference
-    url: https://rybbit.com/docs/api/stats/misc
+    url: https://rybbit.com/docs/api/getting-started
   - type: Documentation
-    url: https://rybbit.com/docs/api/stats/sessions
+    url: https://rybbit.com/docs/api/sessions/list
 - aid: rybbit:rybbit-sessions-api
   name: Rybbit Sessions API
   description: Session-level analytics and cohort retention.
-  humanURL: https://rybbit.com/docs/api/sending-events
+  humanURL: https://rybbit.com/docs/api/sessions/list
   baseURL: https://app.rybbit.io/api
   tags:
   - Sessions
@@ -102,9 +108,9 @@ apis:
   - type: Documentation
     url: https://rybbit.com/docs/api/getting-started
   - type: APIReference
-    url: https://rybbit.com/docs/api/stats/misc
+    url: https://rybbit.com/docs/api/getting-started
   - type: Documentation
-    url: https://rybbit.com/docs/api/stats/sessions
+    url: https://rybbit.com/docs/api/sessions/list
 common:
 - type: AgenticAccess
   url: agentic-access/rybbit-agentic-access.yml
@@ -132,6 +138,79 @@ common:
   url: rate-limits/rybbit-rate-limits.yml
 - type: FinOps
   url: finops/rybbit-finops.yml
+- type: WellKnown
+  url: well-known/rybbit-well-known.yml
+- type: SecurityTxt
+  url: well-known/rybbit-security.txt
+- type: MCPServer
+  url: mcp/rybbit-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/rybbit-tool-crosswalk.yml
+- type: LLMsTxt
+  url: llms/rybbit-llms.txt
+- type: OAuthScopes
+  url: scopes/rybbit-scopes.yml
+- type: Conventions
+  url: conventions/rybbit-conventions.yml
+- type: ErrorCatalog
+  url: errors/rybbit-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/rybbit-lifecycle.yml
+- type: ChangeLog
+  url: changelog/rybbit-changelog.yml
+- type: ChangeLog
+  url: https://github.com/rybbit-io/rybbit/releases
+- type: Packages
+  url: packages/rybbit-packages.yml
+- type: SDKs
+  url: packages/rybbit-packages.yml
+- type: Conformance
+  url: conformance/rybbit-conformance.yml
+- type: Compliance
+  url: https://rybbit.com/security
+- type: Security
+  url: https://rybbit.com/security
+- type: Sandbox
+  url: sandbox/rybbit-sandbox.yml
+- type: Components
+  url: components/rybbit-components.yml
+- type: DataModel
+  url: data-model/rybbit-data-model.yml
+- type: Overlay
+  url: overlays/rybbit-analytics-api-overlay.yaml
+- type: Overlay
+  url: overlays/rybbit-sessions-api-overlay.yaml
+- type: Overlay
+  url: overlays/rybbit-event-tracking-api-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DeveloperPortal
+  url: https://rybbit.com/docs
+- type: APIReference
+  url: https://rybbit.com/docs/api/getting-started
+- type: GettingStarted
+  url: https://rybbit.com/docs/api/getting-started
+- type: Support
+  url: https://rybbit.com/contact
+- type: Community
+  url: https://discord.gg/DEhGb4hYBj
+- type: Pricing
+  url: https://rybbit.com/pricing
+- type: SignUp
+  url: https://app.rybbit.io/signup
+- type: Login
+  url: https://app.rybbit.io/login
+- type: TermsOfService
+  url: https://rybbit.com/terms-and-conditions
+- type: PrivacyPolicy
+  url: https://rybbit.com/privacy
+- type: SourceCode
+  url: https://github.com/rybbit-io/rybbit
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 26
+  pass: local-v1
