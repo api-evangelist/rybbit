@@ -1,0 +1,86 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://rybbit.com/docs/sdks/web, /docs/sdks/node, /docs/sdks/react-native and
+  the npm registry metadata endpoint (https://registry.npmjs.org/<pkg>), read
+  2026-08-13. Registry misses recorded honestly: PyPI has no `rybbit` project
+  (404), Packagist has no `rybbit/rybbit` (404), and there is no `@rybbit/mcp`
+  on npm (404) — Rybbit's MCP server is remote-only, not a stdio package.
+description: >-
+  Rybbit publishes three first-party JavaScript/TypeScript SDKs on npm plus a
+  CDN-delivered browser tracking script. All three npm packages are owned by the
+  rybbit-io GitHub organization. There are no first-party libraries for Python,
+  PHP, Ruby, Go, Java or .NET — server-side users are pointed at POST /api/track
+  directly.
+packages:
+  - language: javascript
+    registry: npm
+    name: "@rybbit/js"
+    url: https://www.npmjs.com/package/@rybbit/js
+    source: https://github.com/rybbit-io/rybbit-js
+    install: npm install @rybbit/js
+    official: true
+    version: 0.6.2
+    published: '2026-02-16'
+    note: >-
+      Browser SDK ("Rybbit Web SDK"). Optional peer dependency on rrweb for
+      session replay. Configured with analyticsHost + siteId.
+  - language: javascript
+    registry: npm
+    name: "@rybbit/node"
+    url: https://www.npmjs.com/package/@rybbit/node
+    source: https://github.com/rybbit-io/rybbit-node
+    install: npm install @rybbit/node
+    official: true
+    version: 1.0.0
+    published: '2025-06-23'
+    note: >-
+      Server-side Node.js SDK. Requires analyticsHost, siteId and apiKey. Last
+      published 2025-06-23 — over a year before the v2.8.0 API surface it wraps,
+      and before organization-scoped API keys existed.
+  - language: javascript
+    registry: npm
+    name: "@rybbit/react-native"
+    url: https://www.npmjs.com/package/@rybbit/react-native
+    install: npm install @rybbit/react-native
+    official: true
+    version: 0.1.1
+    published: '2026-06-10'
+    note: >-
+      React Native SDK, shipped with product release v2.7.0. Recommends the
+      @react-native-async-storage/async-storage peer for persistent visitor ids.
+      npm metadata declares no repository field.
+  - language: javascript
+    registry: cdn
+    name: rybbit tracking script
+    url: https://app.rybbit.io/api/script.js
+    install: '<script src="https://app.rybbit.io/api/script.js" data-site-id="..."></script>'
+    official: true
+    version: null
+    published: null
+    note: >-
+      The browser tracking script is served from the analytics host itself, not
+      a package registry. The URL is UNPINNED — it always resolves to whatever
+      build the instance is running, so a consumer cannot tell which version
+      they loaded and neither can we. Probed 2026-08-13: HTTP 200,
+      application/javascript, 33,053 bytes. Self-hosters serve the same path
+      from their own BASE_URL.
+registries_checked:
+  - {registry: npm, result: 3 first-party packages}
+  - {registry: pypi, package: rybbit, status: 404}
+  - {registry: packagist, package: rybbit/rybbit, status: 404}
+  - {registry: npm, package: '@rybbit/mcp', status: 404, note: 'no stdio MCP package exists; the MCP server is remote-only'}
+  - {registry: rubygems, result: not published}
+  - {registry: crates.io, result: not published}
+  - {registry: nuget, result: not published}
+  - {registry: maven, result: not published}
+  - {registry: pkg.go.dev, result: not published}
+observations:
+  - >-
+    @rybbit/node's last release (2025-06-23) predates every 2026 product release
+    that changed the API, including organization-scoped API keys (v2.8.0). The
+    server SDK is the stalest first-party artifact Rybbit ships.
+  - >-
+    Community integrations exist for WordPress, Drupal, Shopify, GTM and ~35
+    other platforms, but they are documented as snippet/plugin guides rather
+    than first-party registry packages, so they are not listed here.

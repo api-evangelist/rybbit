@@ -1,0 +1,106 @@
+generated: '2026-08-13'
+method: probed
+description: >-
+  Results of probing the /.well-known/ discovery surface for every host in
+  apis.yml (baseURL host app.rybbit.io, Website www.rybbit.io) and the docs
+  host rybbit.com. Status is the HTTP code observed at fetch time. The API
+  host app.rybbit.io serves three real machine-readable documents — RFC 8414
+  OAuth authorization-server metadata, an OIDC discovery document, and RFC
+  9728 protected-resource metadata for Rybbit's hosted MCP endpoint. The
+  marketing/docs hosts (rybbit.io, www.rybbit.io, rybbit.com) return the
+  Next.js 404 shell for every /.well-known/ path; those are recorded as
+  misses, not documents.
+hosts:
+  - host: https://app.rybbit.io
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        type: application/json
+        file: rybbit-oauth-authorization-server.json
+        note: >-
+          RFC 8414 metadata for the MCP authorization server. issuer
+          https://app.rybbit.io; authorization/token/userinfo/jwks/registration
+          endpoints under /api/auth/mcp/. Advertises PKCE S256, dynamic client
+          registration, and 29 scopes (see scopes/rybbit-scopes.yml).
+      - path: /.well-known/openid-configuration
+        status: 200
+        type: application/json
+        file: rybbit-openid-configuration.json
+        note: Byte-identical to the RFC 8414 document above; same issuer and endpoints.
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        type: application/json
+        file: rybbit-oauth-protected-resource.json
+        note: >-
+          RFC 9728 protected-resource metadata naming
+          https://app.rybbit.io/api/mcp as the resource. Also served at
+          /.well-known/oauth-protected-resource/api/mcp (200, identical body);
+          /.well-known/oauth-protected-resource/mcp returns 404.
+      - path: /.well-known/security.txt
+        status: 404
+        note: >-
+          404 here and on every Rybbit host, including the Canonical URL the
+          served security.txt names (https://rybbit.com/.well-known/security.txt).
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://rybbit.com
+    documents:
+      - path: /security.txt
+        status: 200
+        type: text/plain
+        file: rybbit-security.txt
+        note: >-
+          A real RFC 9116 document (Contact, Preferred-Languages, Expires,
+          Canonical) but served at the site root, NOT at
+          /.well-known/security.txt. Its own Canonical field points at
+          https://rybbit.com/.well-known/security.txt, which returns 404 — a
+          self-inconsistency worth reporting to the provider. Identical file is
+          served at https://rybbit.io/security.txt.
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: https://www.rybbit.io
+    documents:
+      - path: /llms.txt
+        status: 200
+        type: text/plain
+        note: Saved separately to llms/rybbit-llms.txt.
+      - path: /security.txt
+        status: 200
+        type: text/plain
+        note: Same document as rybbit.com/security.txt.
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+findings:
+  well_known_documents_served: 3
+  agent_card: none
+  security_txt: served at /security.txt (non-canonical path)

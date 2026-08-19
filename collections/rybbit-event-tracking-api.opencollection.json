@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rybbit Analytics Event Tracking API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Event Tracking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Send a pageview or custom event.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.rybbit.io/api/track",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Public ingestion endpoint used by the Rybbit tracking script and server-side / mobile integrations. No API key is required for basic tracking; the server validates the payload, resolves the site by site_id, and applies rate limiting. The `type` field selects the event kind (pageview, custom_event, or outbound)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,186 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://rybbit.com/docs/api/getting-started (authentication, rate limits,
+  common time parameters, filters, error responses),
+  https://rybbit.com/docs/api/sending-events (ingestion payload),
+  https://rybbit.com/docs/mcp (scopes and permission model), plus the operation
+  shapes in openapi/*.yml.
+description: >-
+  How the Rybbit API behaves across every operation — the cross-cutting
+  request/response semantics that the specs in openapi/ do not fully express.
+  Two surfaces share the same conventions: the read-mostly Stats/Management API
+  under /api/sites/{site} and /api/organizations, and the public ingestion
+  endpoint POST /api/track.
+
+base_url: https://app.rybbit.io/api
+self_hosted_base_url_template: https://{BASE_URL}/api
+api_style: REST over HTTPS, JSON request and response bodies
+status: >-
+  Beta. Rybbit's own API reference carries a standing warning that "there may be
+  breaking changes as we continue to improve and expand the API."
+
+authentication:
+  scheme: 'HTTP Bearer (`Authorization: Bearer <key>`) — API key or OAuth access token'
+  key_types:
+    - 'organization key (prefix rb_org_) — org-wide, admin/owner created'
+    - 'personal key — acts as the user, across every org they belong to'
+    - 'OAuth 2.1 access token — MCP clients only'
+  testing_only: '?api_key=<key> query parameter (not accepted on the MCP endpoint)'
+  docs: https://rybbit.com/docs/api/getting-started
+  detail: authentication/rybbit-authentication.yml
+
+authorization:
+  model: '`resource:action` scopes intersected with the organization role (member / admin / owner)'
+  write_implies_read: true
+  insufficient_scope_response: '403 {"error":"Insufficient scope","required":"goals:write"}'
+  detail: scopes/rybbit-scopes.yml
+
+idempotency:
+  supported: false
+  mechanism: null
+  note: >-
+    Rybbit documents no idempotency key, no Idempotency-Key header, and no
+    replay semantics on any write endpoint, including POST /api/track. Retrying
+    a write is not safe by contract. Recorded as an honest absence — no
+    Idempotency pointer is emitted for this provider.
+
+pagination:
+  style: offset
+  request_params:
+    page: 1-based page number (default 1)
+    limit: page size on session/user/error listings (default 20 on sessions)
+    page_size: page size on goals and events listings
+  response_fields:
+    data: array of results
+  note: >-
+    Pagination parameters are per-endpoint rather than global; the reference
+    marks which listings support them ("Supports pagination"). No cursor,
+    has_more flag or Link header is documented.
+
+time_parameters:
+  description: >-
+    Analytics endpoints require exactly one of three time selections, not a
+    mixture.
+  modes:
+    - name: date range
+      params: [start_date, end_date, time_zone]
+      format: 'start_date/end_date YYYY-MM-DD; time_zone an IANA identifier'
+    - name: exact datetime range
+      params: [start_datetime, end_datetime, time_zone]
+      format: 'YYYY-MM-DD HH:mm:ss in UTC; end_datetime is EXCLUSIVE'
+    - name: relative window
+      params: [past_minutes_start, past_minutes_end]
+      format: 'minutes ago; past_minutes_start must be greater than past_minutes_end'
+  note: >-
+    On the MCP surface the equivalent inputs are optional — omitting them
+    queries all time.
+
+filtering:
+  param: filters
+  encoding: JSON-encoded array of filter objects, URL-encoded in the query string
+  object: '{parameter, type, value[]}'
+  combination: 'multiple filter objects are ANDed; multiple values inside one object are ORed'
+  types: [equals, not_equals, contains, not_contains, regex, not_regex, greater_than, less_than]
+  regex_limit: 500 characters
+  dimensions:
+    browser_device: [browser, browser_version, operating_system, operating_system_version, device_type, dimensions, language]
+    location: [country, region, city, timezone, lat, lon]
+    page_traffic: [pathname, page_title, hostname, querystring, referrer, entry_page, exit_page, channel]
+    utm: [utm_source, utm_medium, utm_campaign, utm_term, utm_content]
+    user_event: [user_id, event_name]
+  notes:
+    - 'city is formatted "Region-City", e.g. "CA-San Francisco".'
+    - 'contains is implemented as SQL LIKE %value%.'
+    - 'lat/lon equality uses a 0.001 tolerance.'
+
+field_expansion:
+  supported: false
+  note: No expand/include parameter is documented; responses are fixed-shape.
+
+metadata:
+  supported: partial
+  mechanism: >-
+    Arbitrary key/value context is carried on events (`properties`, a
+    JSON-encoded object) and on people (`traits`), not as a generic metadata
+    bag on every object.
+
+request_tracing:
+  request_id_header: null
+  note: >-
+    No request-id/correlation header is documented on responses. Debugging is
+    done through the in-dashboard API Playground and, for self-hosters, server
+    logs.
+
+versioning:
+  scheme: none
+  mechanism: null
+  current: 'unversioned — paths are /api/..., with no version segment or version header'
+  note: >-
+    The API carries no version in the path, no version header, and no dated
+    version train. Product releases are versioned (v2.x on GitHub) and breaking
+    infrastructure changes have shipped with a migration guide, but the HTTP
+    contract itself is unversioned and self-declared beta.
+  detail: lifecycle/rybbit-lifecycle.yml
+  changelog: changelog/rybbit-changelog.yml
+
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: '{ "error": "Error message describing what went wrong" }'
+  variants:
+    - '{"error":"Insufficient scope","required":"goals:write"} on a scope failure'
+    - '{"error":"Rate limit exceeded","scope":"daily","limit":5000,"retryAfter":34200} on 429'
+    - '{"message":"Route GET:/api/... not found","error":"Not Found","statusCode":404} from the Fastify router for an unrouted path'
+  detail: errors/rybbit-problem-types.yml
+  docs: https://rybbit.com/docs/api/getting-started
+
+rate_limits:
+  signal_status: 429
+  cloud_only: true
+  response_headers:
+    - X-RateLimit-Burst-Limit
+    - X-RateLimit-Burst-Remaining
+    - X-RateLimit-Burst-Reset
+    - X-RateLimit-Daily-Limit
+    - X-RateLimit-Daily-Remaining
+    - X-RateLimit-Daily-Reset
+    - RateLimit-Limit
+    - RateLimit-Remaining
+    - RateLimit-Reset
+    - Retry-After
+  note: >-
+    Headers are advisory — a few endpoints resolve credentials outside the
+    standard path and omit them — but Retry-After on a 429 is always present.
+    Self-hosted instances send no rate-limit headers at all.
+  detail: rate-limits/rybbit-rate-limits.yml
+  docs: https://rybbit.com/docs/api/getting-started
+
+webhooks:
+  supported: false
+  note: >-
+    Rybbit publishes no outbound webhook or streaming surface for customers; the
+    only webhook handlers in the codebase are inbound billing webhooks Rybbit
+    itself receives. Confirmed 2026-08-13 — no AsyncAPI and no Webhooks pointer
+    is emitted (see review.yml).
+
+other_conventions:
+  - name: Site scoping
+    detail: >-
+      Almost every analytics path is scoped by numeric site id —
+      /api/sites/{site}/... — and management paths by organization id. Call
+      list_sites (MCP) or GET /api/organizations first to resolve both.
+  - name: Ingestion is separate
+    detail: >-
+      POST /api/track takes a flat JSON body keyed by site_id, accepts optional
+      auth, and answers 200/400/429. It does not share the Stats API's time or
+      filter conventions.
+  - name: Destructive operations are unconfirmed
+    detail: >-
+      delete_site, delete_goal, delete_funnel and delete_user (and their REST
+      equivalents) take effect immediately with no soft-delete, undo window, or
+      confirmation token documented.
+  - name: Self-host parity
+    detail: >-
+      Self-hosted AGPL-3.0 instances expose the identical paths on the
+      operator's own BASE_URL with no rate limiting.

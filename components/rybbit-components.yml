@@ -1,0 +1,81 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://rybbit.com/docs/embeds/widget, https://rybbit.com/docs/embeds/dashboard,
+  https://rybbit.com/docs/script, https://rybbit.com/docs/sdks/web
+description: >-
+  Rybbit's client-side surface is small and iframe-based rather than a component
+  library. Two embeddable surfaces (a live-visitor widget and a full dashboard
+  embed) are configured in the dashboard and pasted in as self-contained
+  iframes, so they need no JavaScript on the host page at all. The only loader
+  script is the tracking script itself. There are no web components, no element
+  library, and no hosted checkout-style prebuilt UI.
+families:
+  - name: Embeds
+    description: Self-contained iframes generated in the Rybbit dashboard.
+    components:
+      - name: Widget Embed — Card
+        type: iframe
+        docs: https://rybbit.com/docs/embeds/widget
+        description: >-
+          A compact dashboard card showing the live visitor count, an optional
+          bar chart of users over time, and an optional top-5 country list.
+        options:
+          time_window: [30 minutes, 24 hours, 7 days]
+          bar_chart: [on, off]
+          top_countries: [on, off]
+          width: 240-800 px (default 360)
+          theme: [dark, light]
+          accent_color: any hex (default Rybbit emerald)
+        requirements: >-
+          "Widget Embeds" must be enabled per site. This exposes ONLY the live
+          count, the time series and the top 5 countries through a public
+          read-only endpoint — it does not make the dashboard public.
+      - name: Widget Embed — Inline Pill
+        type: iframe
+        docs: https://rybbit.com/docs/embeds/widget
+        description: >-
+          A compact pill for a header or footer showing a pulsing live dot, the
+          30-minute live count, and the Rybbit logo.
+      - name: Dashboard Embed
+        type: iframe
+        docs: https://rybbit.com/docs/embeds/dashboard
+        description: >-
+          The full read-only analytics dashboard embedded on another site via a
+          private-link route.
+        url_shape: 'https://app.rybbit.io/{siteId}/{privateLinkKey}/main?embed=true&theme=system&hideSidebar=true'
+        options:
+          theme: [light, dark, system]
+          hide_sidebar: [true, false]
+        security_note: >-
+          Private links are unlisted but unauthenticated — anyone holding the
+          iframe URL can read the dashboard. Rybbit's docs say to treat it as a
+          shareable read-only secret. The private-link key is created, rotated
+          and revoked via the site's private-link configuration endpoints.
+        self_hosted: replace app.rybbit.io with your own BASE_URL
+  - name: Loaders
+    description: The client-side script that collects the data.
+    components:
+      - name: Tracking script
+        type: script tag
+        url: https://app.rybbit.io/api/script.js
+        docs: https://rybbit.com/docs/script
+        description: >-
+          Cookieless browser tracking script, configured entirely through
+          data-* attributes (site id, autocapture, session replay, exclusions,
+          proxy path). Distributed from the analytics host, not a CDN package,
+          and unpinned — see packages/rybbit-packages.yml.
+      - name: '@rybbit/js'
+        type: npm module
+        docs: https://rybbit.com/docs/sdks/web
+        description: >-
+          The programmatic browser SDK alternative to the script tag; exposes
+          init/pageview/event/identify. Optional rrweb peer for session replay.
+absent:
+  web_components: false
+  element_library: false
+  hosted_checkout_ui: false
+  note: >-
+    No custom elements, no React/Vue component package, and no
+    Stripe-Elements-style hosted input surface — Rybbit is a measurement
+    product, and its embeddable UI is limited to the two iframes above.

@@ -1,0 +1,185 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  Derived by binding each MCP tool in mcp/rybbit-mcp.yml to the REST operation
+  it calls. The REST target of every tool is published by Rybbit itself in
+  server/src/mcp/tools/*.ts (AGPL-3.0, https://github.com/rybbit-io/rybbit),
+  so the tool-to-endpoint binding is high confidence; the binding to an
+  operationId is only as complete as the captured OpenAPI, which covers 10 of
+  the ~70 endpoints Rybbit documents at https://rybbit.com/docs/api.
+description: >-
+  Rybbit projects one data core through two surfaces: a REST Stats/Management
+  API and a hosted MCP server. The MCP surface is currently the WIDER of the
+  two in the catalog — 38 tools against 10 captured OpenAPI operations —
+  because API Evangelist has only modeled part of Rybbit's documented REST
+  surface (Rybbit publishes no OpenAPI of its own). Every `mcp_only` row below
+  is therefore a CATALOG gap, not a Rybbit surface divergence: each names the
+  real documented REST endpoint the tool calls. There is no GraphQL surface.
+
+surfaces:
+  openapi:
+    files:
+      - openapi/rybbit-analytics-api-openapi.yml
+      - openapi/rybbit-sessions-api-openapi.yml
+      - openapi/rybbit-event-tracking-api-openapi.yml
+      - openapi/_original/rybbit-openapi.yml
+    operations: 10
+    provider_published: false
+    note: >-
+      Rybbit publishes no OpenAPI/Swagger document. Probed 2026-08-13:
+      app.rybbit.io/openapi.json|/openapi.yaml|/swagger.json return the Next.js
+      HTML shell (200), app.rybbit.io/api/openapi.json returns the Fastify JSON
+      404, and no spec file exists anywhere in the public repository tree
+      (2,598 paths searched). The specs above are API Evangelist models of
+      Rybbit's published reference.
+  graphql:
+    endpoint: null
+    note: Rybbit exposes no GraphQL surface.
+  mcp:
+    url: https://app.rybbit.io/api/mcp
+    transport: Streamable HTTP
+    tools: 38
+    gated: true
+    note: >-
+      tools/list returned HTTP 401 with a Bearer challenge on 2026-08-13, so
+      per-tool inputSchema could not be captured. Tool names, descriptions and
+      required scopes come from Rybbit's published docs and server source.
+  rest_reference: https://rybbit.com/docs/api/getting-started
+
+crosswalk:
+  - tool: get_sessions
+    category: raw-data
+    rest: [listSessions]
+    endpoint: GET /api/sites/{site}/sessions
+    binding: rest
+    confidence: high
+  - tool: get_session
+    category: raw-data
+    rest: [getSession]
+    endpoint: GET /api/sites/{site}/sessions/{sessionId}
+    binding: rest
+    confidence: high
+  - tool: get_users
+    category: people
+    rest: [listUsers]
+    endpoint: GET /api/sites/{site}/users
+    binding: rest
+    confidence: high
+  - tool: get_user
+    category: people
+    rest: [getUser]
+    endpoint: GET /api/sites/{site}/users/{userId}
+    binding: rest
+    confidence: high
+  - tool: get_retention
+    category: analytics
+    rest: [getRetention]
+    endpoint: GET /api/sites/{site}/retention
+    binding: rest
+    confidence: high
+  - tool: get_journeys
+    category: analytics
+    rest: [getJourneys]
+    endpoint: GET /api/sites/{site}/journeys
+    binding: rest
+    confidence: high
+
+mcp_only:
+  - tool: get_overview
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/overview) but not in the captured OpenAPI.'
+  - tool: get_overview_timeseries
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/overview/time-series) but not in the captured OpenAPI.'
+  - tool: get_breakdown
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/metric) but not in the captured OpenAPI.'
+  - tool: get_live_stats
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/live-user-count) but not in the captured OpenAPI.'
+  - tool: get_event_names
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/events/names) but not in the captured OpenAPI.'
+  - tool: get_errors
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/errors/names) but not in the captured OpenAPI.'
+  - tool: get_web_vitals
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/performance/overview) but not in the captured OpenAPI.'
+  - tool: list_sites
+    reason: 'Backing REST endpoint documented (GET /api/organizations) but not in the captured OpenAPI.'
+  - tool: get_site
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}) but not in the captured OpenAPI.'
+  - tool: create_site
+    reason: 'Backing REST endpoint documented (POST /api/organizations/{organization_id}/sites) but not in the captured OpenAPI.'
+  - tool: update_site_config
+    reason: 'Backing REST endpoint documented (PUT /api/sites/{site}/config) but not in the captured OpenAPI.'
+  - tool: delete_site
+    reason: 'Backing REST endpoint documented (DELETE /api/sites/{site}) but not in the captured OpenAPI.'
+  - tool: get_goals
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/goals) but not in the captured OpenAPI.'
+  - tool: create_goal
+    reason: 'Backing REST endpoint documented (POST /api/sites/{site}/goals) but not in the captured OpenAPI.'
+  - tool: update_goal
+    reason: 'Backing REST endpoint documented (PUT /api/sites/{site}/goals/{goal_id}) but not in the captured OpenAPI.'
+  - tool: delete_goal
+    reason: 'Backing REST endpoint documented (DELETE /api/sites/{site}/goals/{goal_id}) but not in the captured OpenAPI.'
+  - tool: get_funnels
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/funnels) but not in the captured OpenAPI.'
+  - tool: analyze_funnel
+    reason: 'Backing REST endpoint documented (POST /api/sites/{site}/funnels/analyze) but not in the captured OpenAPI.'
+  - tool: save_funnel
+    reason: 'Backing REST endpoint documented (POST /api/sites/{site}/funnels) but not in the captured OpenAPI.'
+  - tool: delete_funnel
+    reason: 'Backing REST endpoint documented (DELETE /api/sites/{site}/funnels/{funnel_id}) but not in the captured OpenAPI.'
+  - tool: identify_user
+    reason: 'Backing REST endpoint documented (POST /api/sites/{site}/users/identify) but not in the captured OpenAPI.'
+  - tool: update_user_traits
+    reason: 'Backing REST endpoint documented (PUT /api/sites/{site}/users/{userId}/traits) but not in the captured OpenAPI.'
+  - tool: delete_user
+    reason: 'Backing REST endpoint documented (DELETE /api/sites/{site}/users/{userId}) but not in the captured OpenAPI.'
+  - tool: list_members
+    reason: 'Backing REST endpoint documented (GET /api/organizations/{organization_id}/members) but not in the captured OpenAPI.'
+  - tool: add_member
+    reason: 'Backing REST endpoint documented (POST /api/organizations/{organization_id}/members) but not in the captured OpenAPI.'
+  - tool: update_member_site_access
+    reason: 'Backing REST endpoint documented (PUT /api/organizations/{organization_id}/members/{member_id}/sites) but not in the captured OpenAPI.'
+  - tool: list_teams
+    reason: 'Backing REST endpoint documented (GET /api/organizations/{organization_id}/teams) but not in the captured OpenAPI.'
+  - tool: create_team
+    reason: 'Backing REST endpoint documented (POST /api/organizations/{organization_id}/teams) but not in the captured OpenAPI.'
+  - tool: update_team
+    reason: 'Backing REST endpoint documented (PUT /api/organizations/{organization_id}/teams/{team_id}) but not in the captured OpenAPI.'
+  - tool: delete_team
+    reason: 'Backing REST endpoint documented (DELETE /api/organizations/{organization_id}/teams/{team_id}) but not in the captured OpenAPI.'
+  - tool: get_events
+    reason: 'Backing REST endpoint documented (GET /api/sites/{site}/events) but not in the captured OpenAPI.'
+  - tool: run_query
+    reason: 'Backing REST endpoint documented (POST /api/organizations/{organization_id}/analytics/query) but not in the captured OpenAPI.'
+  - tool: get_query_schema
+    reason: >-
+      Genuinely MCP-only. It returns the ClickHouse schema and the rules for
+      run_query as agent context; no corresponding REST endpoint is documented.
+
+rest_only:
+  - operations: [trackEvent]
+    capability: Event ingestion
+    note: >-
+      POST /api/track is the public ingestion endpoint used by the tracking
+      script and server SDKs. Deliberately absent from MCP — the `ingest:write`
+      OAuth scope exists but no ingestion tool is registered.
+  - operations: [listSessionLocations]
+    capability: Session geography
+    note: 'GET /api/sites/{site}/session-locations has no MCP tool.'
+  - operations: [listUserSessions]
+    capability: Per-user session history
+    note: 'GET /api/sites/{site}/users/{userId}/sessions has no MCP tool.'
+  - operations: [getUserSessionCount]
+    capability: Per-user session counts
+    note: 'GET /api/sites/{site}/users/session-count has no MCP tool.'
+
+coverage:
+  mcp_tools_named: 38
+  mcp_tools_bound_to_operationid: 6
+  mcp_only: 32
+  mcp_genuinely_without_rest: 1
+  rest_operations_total: 10
+  rest_operations_with_tool: 6
+  rest_only: 4
+  note: >-
+    Only 1 of the 32 mcp_only rows (get_query_schema) is a true surface
+    divergence. The other 31 are catalog coverage gaps against Rybbit's
+    documented REST reference, and would close if Rybbit published an OpenAPI.

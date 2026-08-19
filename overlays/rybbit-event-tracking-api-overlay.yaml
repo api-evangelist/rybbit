@@ -1,0 +1,51 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Rybbit Event Tracking API
+  version: 1.0.0
+extends: openapi/rybbit-event-tracking-api-openapi.yml
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: >-
+    API Evangelist enrichment pass 2026-08-13, from
+    https://rybbit.com/docs/api/sending-events.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-artifacts:
+        conventions: conventions/rybbit-conventions.yml
+        errors: errors/rybbit-problem-types.yml
+        rate_limits: rate-limits/rybbit-rate-limits.yml
+        packages: packages/rybbit-packages.yml
+      x-api-status: beta
+      x-idempotency: none
+  - target: $.paths['/api/track'].post
+    update:
+      x-auth-optional: >-
+        No API key is required, but sending one bypasses bot detection and
+        domain validation — recommended for server-side tracking.
+      x-mcp-tool: null
+      x-surface-note: >-
+        REST-only. The ingest:write OAuth scope exists but no MCP tool performs
+        ingestion.
+      x-retry-safety: >-
+        No idempotency key is documented; a retried POST may duplicate the
+        event.
+  - target: $.components.schemas.TrackRequest.properties.type
+    update:
+      x-current-enum: [pageview, custom_event, performance, outbound, error]
+      x-note: >-
+        Rybbit's current reference documents five event types; the base document
+        lists three. Recorded here rather than edited into the spec.
+  - target: $.components.schemas.TrackRequest
+    update:
+      x-additional-documented-fields:
+        ip_address: Valid IPv4 or IPv6 address, resolved to location data.
+      x-field-limits:
+        pathname: 2048
+        hostname: 253
+        page_title: 512
+        referrer: 2048
+        user_id: 255
+        user_agent: 512
+        querystring: 2048

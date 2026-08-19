@@ -1,0 +1,93 @@
+generated: '2026-08-13'
+method: derived
+source: >-
+  Derived from the schemas and path parameters in openapi/*.yml (TrackRequest,
+  Session, the {site}/{sessionId}/{userId} path hierarchy) and from the id
+  fields Rybbit's own reference and MCP tool signatures require
+  (organization_id, site_id, session_id, user_id, goal_id, funnel_id,
+  member_id, team_id, import_id) — https://rybbit.com/docs/api/getting-started
+  and https://rybbit.com/docs/mcp.
+description: >-
+  Rybbit's entity graph is a two-level tenancy (Organization → Site) with every
+  analytics object scoped under a Site, and every event scoped under a Session.
+  Identifiers are plain numeric or string ids — Rybbit uses no typed id
+  prefixes, so there is no prefix column here. The only prefixed identifiers in
+  the platform are credentials (rb_org_ organization API keys), not objects.
+notation: >-
+  relationships use has_one / has_many / belongs_to with the reference field
+  name; direction is from the entity that owns the reference.
+docs: https://rybbit.com/docs/api/getting-started
+
+entities:
+  - {name: Organization, key: organization_id, domain: tenancy, description: The billing and membership boundary; owns sites, members, teams and organization API keys.}
+  - {name: Member, key: member_id, domain: tenancy, description: A user's membership in an organization, carrying a role (member/admin/owner) and optional per-site restrictions.}
+  - {name: Team, key: team_id, domain: tenancy, description: A named subset of members with access to a named subset of sites.}
+  - {name: Site, key: site_id, domain: tenancy, description: A tracked website or React Native app; the scope for every analytics query and the unit of configuration.}
+  - {name: Session, key: session_id, domain: analytics, description: A visit — attribution, geography, device, entry/exit page, duration, and counts of pageviews and events.}
+  - {name: Event, key: null, domain: analytics, description: 'A single tracked occurrence within a session: pageview, custom_event, outbound, performance or error.'}
+  - {name: Person, key: user_id, domain: people, description: A visitor identity — an anonymous device id, or an identified user id once identify is called — carrying traits and linked devices.}
+  - {name: Goal, key: goal_id, domain: conversion, description: A conversion definition (path, event, or autocapture) evaluated against sessions.}
+  - {name: Funnel, key: funnel_id, domain: conversion, description: An ordered multi-step conversion path, saved or analyzed ad hoc.}
+  - {name: SessionReplay, key: session_id, domain: replay, description: An rrweb recording of a session, stored in object storage and replayable in the dashboard.}
+  - {name: Import, key: import_id, domain: data, description: A historical data import from another analytics platform, uploaded in event batches.}
+  - {name: ApiKey, key: id, domain: auth, description: 'A credential: organization-scoped (rb_org_) or personal, optionally restricted to resource:action scopes.'}
+  - {name: PrivateLink, key: privateLinkKey, domain: sharing, description: An unlisted secret key that grants unauthenticated read access to a site dashboard, used by dashboard embeds.}
+
+relationships:
+  - {from: Organization, to: Site, kind: has_many, via: organization_id}
+  - {from: Organization, to: Member, kind: has_many, via: organization_id}
+  - {from: Organization, to: Team, kind: has_many, via: organization_id}
+  - {from: Organization, to: ApiKey, kind: has_many, via: organization_id}
+  - {from: Team, to: Member, kind: has_many, via: member_id}
+  - {from: Team, to: Site, kind: has_many, via: site_id}
+  - {from: Member, to: Organization, kind: belongs_to, via: organization_id}
+  - {from: Site, to: Organization, kind: belongs_to, via: organization_id}
+  - {from: Site, to: Session, kind: has_many, via: site_id}
+  - {from: Site, to: Person, kind: has_many, via: site_id}
+  - {from: Site, to: Goal, kind: has_many, via: site_id}
+  - {from: Site, to: Funnel, kind: has_many, via: site_id}
+  - {from: Site, to: Import, kind: has_many, via: site_id}
+  - {from: Site, to: PrivateLink, kind: has_one, via: privateLinkKey}
+  - {from: Session, to: Site, kind: belongs_to, via: site_id}
+  - {from: Session, to: Person, kind: belongs_to, via: user_id}
+  - {from: Session, to: Event, kind: has_many, via: session_id}
+  - {from: Session, to: SessionReplay, kind: has_one, via: session_id}
+  - {from: Event, to: Session, kind: belongs_to, via: session_id}
+  - {from: Event, to: Site, kind: belongs_to, via: site_id}
+  - {from: Person, to: Session, kind: has_many, via: user_id}
+  - {from: Goal, to: Site, kind: belongs_to, via: site_id}
+  - {from: Funnel, to: Site, kind: belongs_to, via: site_id}
+  - {from: Import, to: Event, kind: has_many, via: import_id}
+
+key_fields:
+  Session:
+    source: openapi (components.schemas.Session)
+    fields: [session_id, user_id, identified_user_id, traits, country, region, city, browser, operating_system, device_type, referrer, channel, entry_page, exit_page, pageviews, events, session_duration, session_start, session_end, utm_source, utm_medium, utm_campaign]
+  Event:
+    source: openapi (components.schemas.TrackRequest) + https://rybbit.com/docs/api/sending-events
+    fields: [site_id, type, event_name, hostname, pathname, querystring, page_title, referrer, language, screenWidth, screenHeight, user_agent, ip_address, properties]
+    type_enum: [pageview, custom_event, performance, outbound, error]
+    note: >-
+      The captured OpenAPI's TrackRequest enum lists only pageview,
+      custom_event and outbound; Rybbit's current reference adds performance and
+      error. Recorded here rather than edited into the spec.
+
+identity_model:
+  anonymous: >-
+    A device-derived visitor id. Rybbit stores no raw visitor data — IPs are
+    hashed and anonymized and user agents are hashed daily with a rotating salt.
+  identified: >-
+    Calling identify links an anonymous device to a customer-supplied user_id
+    and merges traits. Since v2.8.0 sessions are keyed per identified user, so
+    people sharing an IP and browser no longer collapse into one session.
+  erasure: >-
+    A single person's analytics data can be erased (GDPR), which is exposed as
+    an admin/destructive operation.
+
+storage_note: >-
+  The analytical store is ClickHouse, and Rybbit exposes it directly:
+  `run_query` executes read-only SQL against a site-scoped `scoped_events`
+  table, with `get_query_schema` returning that table's schema. That schema is
+  the authoritative low-level data model and is only reachable with a
+  `sql:read` credential — it could not be captured anonymously.
+render: null

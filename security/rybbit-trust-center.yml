@@ -1,15 +1,54 @@
-generated: '2026-07-11'
+generated: '2026-08-13'
 method: searched
-probe: true
+probe: false
 source: https://rybbit.com/security
 url: https://rybbit.com/security
-certifications:
-- ISO 27001
-- PCI DSS
-- GDPR
+description: >-
+  Rybbit publishes a security page describing visitor privacy protection,
+  infrastructure, authentication, data ownership, deletion windows and
+  compliance. It is a security/trust NARRATIVE, not a certification trust
+  center: Rybbit holds no third-party security certification of its own, and
+  there is no trust.rybbit.io / trust-portal surface.
+certifications: []
+certifications_note: >-
+  CORRECTION (2026-08-13). Earlier rounds of this artifact listed "ISO 27001,
+  PCI DSS, GDPR" as Rybbit certifications. That was a keyword-match false
+  positive against this page: the ISO 27001 claim belongs to HETZNER, Rybbit's
+  hosting provider ("Hetzner is ISO 27001 certified"), and the PCI DSS claim
+  belongs to STRIPE, its payment processor ("All payment processing is handled
+  by PCI DSS compliant payment processors"). Rybbit itself states neither.
+  Attributing a vendor's certification to the provider overstates its posture,
+  so the list is now empty and the third-party certifications are recorded
+  separately below. Do not let the mechanical probe re-add them.
+third_party_certifications:
+  - {holder: Hetzner, relationship: 'hosting provider (Germany, EU)', certification: ISO 27001}
+  - {holder: Stripe, relationship: payment processor, certification: PCI DSS}
+  - {holder: Cloudflare, relationship: R2 object storage for session replays, certification: none stated}
+compliance_claims: [GDPR, CCPA, PECR]
+dpa: https://rybbit.com/dpa
+posture:
+  data_residency: Hetzner servers in Germany, within the European Union.
+  visitor_privacy:
+    - No cookies or local storage used for tracking.
+    - IP addresses hashed and anonymized.
+    - User-Agent strings hashed daily with rotating salts.
+    - Raw visitor data never stored.
+  network: Database servers are not reachable from the open internet; private networks with firewall rules.
+  account_security:
+    - Passwords hashed and salted with a unique per-password salt.
+    - Sessions expire after 14 days of inactivity.
+  data_ownership:
+    - Customer owns 100% of their analytics data.
+    - Account, site and per-person deletion available.
+    - Analytics data permanently deleted within 60 days of cancellation.
+  transparency: Fully open source (AGPL-3.0), auditable by security researchers.
 evidence:
-- source: https://rybbit.com/security
-  keywords:
-  - iso 27001
-  - pci dss
-  - gdpr
+  - source: https://rybbit.com/security
+    http_status: 200
+    fetched: '2026-08-13'
+    quotes:
+      - 'Hetzner is ISO 27001 certified'
+      - 'All payment processing is handled by PCI DSS compliant payment processors (Stripe).'
+      - 'GDPR compliant (no personal data collection)'
+      - 'CCPA compliant'
+      - 'PECR compliant (no cookie consent needed)'

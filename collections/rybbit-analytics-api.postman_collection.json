@@ -1,0 +1,569 @@
+{
+  "item": [
+    {
+      "id": "04d5d74e-ea4a-40a5-806c-ecc1364459ce",
+      "name": "Analytics",
+      "description": {
+        "content": "Stats API for events and reporting per site.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "d059b023-93cf-43d7-aa14-d95026831d52",
+          "name": "List users for a site.",
+          "request": {
+            "name": "List users for a site.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "users"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1c1f500-0d21-428f-8430-77e35f6b4288",
+              "name": "A list of users.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "users"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "04660768-373b-4474-9bbd-6c6ba0306174",
+          "name": "Get a single user.",
+          "request": {
+            "name": "Get a single user.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "users",
+                ":userId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8c6fe9b1-d76d-4ad3-a8c1-765937d2125b",
+              "name": "User detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "users",
+                    ":userId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9064257c-9e1a-47b4-ac1c-4424fa15b6c3",
+          "name": "List sessions for a user.",
+          "request": {
+            "name": "List sessions for a user.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "users",
+                ":userId",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "userId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "04fe5501-0da5-450b-88d4-f654c586fd5c",
+              "name": "Sessions for the user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "users",
+                    ":userId",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "userId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bae918fe-86f1-4f5a-8d84-afad02da9a9c",
+          "name": "Get per-user session counts.",
+          "request": {
+            "name": "Get per-user session counts.",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "users",
+                "session-count"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "95ee856a-2946-4346-aed1-105dcbc8562c",
+              "name": "Session counts grouped by user.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "users",
+                    "session-count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b08b1e4e-84e5-4bdc-9e86-908fa92c96c9",
+          "name": "Get user journeys.",
+          "request": {
+            "name": "Get user journeys.",
+            "description": {
+              "content": "Returns common navigation paths (journeys) users take through the site.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "journeys"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c27f5f35-0559-4b04-a118-74e74cd2e3cf",
+              "name": "Journey data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "journeys"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.rybbit.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8bfd93ed-7a94-45f1-9ccf-b4f6e6e0f8a7",
+    "name": "Rybbit Analytics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.\n\nContact Support:\n Name: Rybbit",
+      "type": "text/plain"
+    }
+  }
+}

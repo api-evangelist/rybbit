@@ -1,0 +1,230 @@
+{
+  "item": [
+    {
+      "id": "c23282a8-8a91-47a5-be9f-6652a336ee32",
+      "name": "Event Tracking",
+      "description": {
+        "content": "Public ingestion endpoint for pageviews and custom events.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "64b79167-9c3d-4c8e-81a5-83dd543816a2",
+          "name": "Send a pageview or custom event.",
+          "request": {
+            "name": "Send a pageview or custom event.",
+            "description": {
+              "content": "Public ingestion endpoint used by the Rybbit tracking script and server-side / mobile integrations. No API key is required for basic tracking; the server validates the payload, resolves the site by site_id, and applies rate limiting. The `type` field selects the event kind (pageview, custom_event, or outbound).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "track"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"site_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"hostname\": \"<string>\",\n  \"pathname\": \"<string>\",\n  \"querystring\": \"<string>\",\n  \"page_title\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"language\": \"<string>\",\n  \"screenWidth\": \"<integer>\",\n  \"screenHeight\": \"<integer>\",\n  \"user_agent\": \"<string>\",\n  \"properties\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8bfcc861-c1f9-4bcf-ba11-a57027b07591",
+              "name": "Event accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "track"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"site_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"hostname\": \"<string>\",\n  \"pathname\": \"<string>\",\n  \"querystring\": \"<string>\",\n  \"page_title\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"language\": \"<string>\",\n  \"screenWidth\": \"<integer>\",\n  \"screenHeight\": \"<integer>\",\n  \"user_agent\": \"<string>\",\n  \"properties\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9ab67fca-f733-4b2e-8155-88779e7a31bb",
+              "name": "Bad Request - payload failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "track"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"site_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"hostname\": \"<string>\",\n  \"pathname\": \"<string>\",\n  \"querystring\": \"<string>\",\n  \"page_title\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"language\": \"<string>\",\n  \"screenWidth\": \"<integer>\",\n  \"screenHeight\": \"<integer>\",\n  \"user_agent\": \"<string>\",\n  \"properties\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7df38a44-73b8-4d14-b07e-ba90cb600e6d",
+              "name": "Too Many Requests - rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "track"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"site_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"event_name\": \"<string>\",\n  \"hostname\": \"<string>\",\n  \"pathname\": \"<string>\",\n  \"querystring\": \"<string>\",\n  \"page_title\": \"<string>\",\n  \"referrer\": \"<string>\",\n  \"language\": \"<string>\",\n  \"screenWidth\": \"<integer>\",\n  \"screenHeight\": \"<integer>\",\n  \"user_agent\": \"<string>\",\n  \"properties\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.rybbit.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c2205da5-4be3-4203-ac7a-c43404d320d9",
+    "name": "Rybbit Analytics Event Tracking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.\n\nContact Support:\n Name: Rybbit",
+      "type": "text/plain"
+    }
+  }
+}

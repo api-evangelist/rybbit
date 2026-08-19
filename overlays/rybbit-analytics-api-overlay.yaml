@@ -1,0 +1,64 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Rybbit Analytics API
+  version: 1.0.0
+extends: openapi/rybbit-analytics-api-openapi.yml
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: >-
+    API Evangelist enrichment pass 2026-08-13. Captures runtime semantics Rybbit
+    documents at https://rybbit.com/docs/api/getting-started and
+    https://rybbit.com/docs/mcp that the OpenAPI does not express. Rybbit
+    publishes no OpenAPI of its own, so the base document is an API Evangelist
+    model; this overlay records our additions without mutating it.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-artifacts:
+        conventions: conventions/rybbit-conventions.yml
+        errors: errors/rybbit-problem-types.yml
+        rate_limits: rate-limits/rybbit-rate-limits.yml
+        authentication: authentication/rybbit-authentication.yml
+        scopes: scopes/rybbit-scopes.yml
+        mcp: mcp/rybbit-mcp.yml
+        crosswalk: mcp/rybbit-tool-crosswalk.yml
+        data_model: data-model/rybbit-data-model.yml
+      x-api-status: beta
+      x-provider-publishes-openapi: false
+      x-idempotency: none
+  - target: $.components.securitySchemes.bearerAuth
+    update:
+      x-key-types:
+        - organization key (prefix rb_org_), org-wide, admin/owner created
+        - personal key, acts as the user across every organization
+        - OAuth 2.1 access token issued by https://app.rybbit.io for MCP clients
+      x-scoped-keys: >-
+        Keys may be created with a permissions object restricting them to
+        resource:action scopes; see scopes/rybbit-scopes.yml.
+  - target: $.paths.*.get
+    update:
+      x-rate-limit-headers:
+        - X-RateLimit-Burst-Limit
+        - X-RateLimit-Burst-Remaining
+        - X-RateLimit-Burst-Reset
+        - X-RateLimit-Daily-Limit
+        - X-RateLimit-Daily-Remaining
+        - X-RateLimit-Daily-Reset
+        - RateLimit-Limit
+        - RateLimit-Remaining
+        - RateLimit-Reset
+      x-error-envelope: '{ "error": string }'
+      x-required-scope-family: 'analytics:read (users/journeys), users:read (person objects)'
+  - target: $.paths['/api/sites/{site}/users'].get
+    update:
+      x-mcp-tool: get_users
+      x-mcp-scope: 'users:read'
+  - target: $.paths['/api/sites/{site}/users/{userId}'].get
+    update:
+      x-mcp-tool: get_user
+      x-mcp-scope: 'users:read'
+  - target: $.paths['/api/sites/{site}/journeys'].get
+    update:
+      x-mcp-tool: get_journeys
+      x-mcp-scope: 'analytics:read'

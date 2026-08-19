@@ -3,9 +3,12 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
 provider: Rybbit
 providerId: rybbit
+generated: '2026-08-13'
+method: searched
+source: https://rybbit.com/docs/api/getting-started
 created: '2026-06-21'
-modified: '2026-06-21'
-reconciled: false
+modified: '2026-08-13'
+reconciled: true
 tags:
 - Analytics
 - Web Analytics
@@ -16,50 +19,121 @@ tags:
 - Quotas
 - Throttling
 description: >-
-  Rybbit applies API rate limits only on Rybbit Cloud and only to the Stats
-  (read) API. Limits are per-plan: the Standard plan allows 20 requests per
-  minute and the Pro plan allows 200 requests per minute (10x). Self-hosted
-  instances have no rate limits. Exceeding a limit returns HTTP 429. The
-  ingestion endpoint (POST /api/track) is governed by per-site ingestion
-  controls rather than the published Stats API per-minute limits.
+  Rybbit rate-limits the API on Rybbit Cloud only, in two dimensions at once: a
+  BURST bucket that is identical on every plan (50 requests, refilling
+  continuously at 5 per second) and a DAILY QUOTA that scales with the plan
+  (5,000/day on Standard, 25,000/day on Pro, resetting at 00:00 UTC). Limits
+  apply per CREDENTIAL OWNER, never per key — creating more keys splits an
+  existing budget rather than adding to it — and an OAuth/MCP token draws on
+  the same budget as the user's personal keys. Requests refused by the burst
+  limit do not count against the daily quota. Self-hosted (AGPL-3.0) instances
+  are not rate limited at all and send no rate-limit headers.
 notes: >-
-  Stats API rate limits apply to cloud plans only; self-hosted deployments
-  are unthrottled. Verify current per-plan request-per-minute values on the
-  Rybbit API getting-started documentation during reconciliation.
+  SUPERSEDES the 20 rpm / 200 rpm figures recorded in this file in June 2026;
+  Rybbit's current documentation describes a burst-plus-daily model instead.
+  API keys are not available at all on the Free/Basic tier, so there is no
+  free-tier rate limit — there is no free-tier API access.
 sources:
 - https://rybbit.com/docs/api/getting-started
 - https://rybbit.com/pricing
 - https://rybbit.com/docs/self-host-vs-cloud
 responseCodes:
   throttled: 429
+limit_count: 5
 limits:
-- name: Stats API - Standard Plan
+- name: Burst — all cloud plans
+  scope: credential-owner
+  metric: requests
+  limit: 50 per 10 seconds
+  burst: 50
+  refill: 5 requests per second, continuous
+  window: rolling (token bucket, no window boundary)
+  notes: >-
+    Identical on Standard and Pro. Spend all 50 at once, then continue at 5/s.
+    Rejections here are cheap — they clear in about a second and are not charged
+    to the daily quota.
+- name: Daily quota — Standard
+  scope: credential-owner
+  metric: requests
+  limit: 5000 per day
+  window: resets 00:00 UTC
+- name: Daily quota — Pro
+  scope: credential-owner
+  metric: requests
+  limit: 25000 per day
+  window: resets 00:00 UTC
+- name: Free / Basic
   scope: account
   metric: requests
-  limit: 20 per minute
-  notes: Cloud Standard plan Stats API request rate.
-- name: Stats API - Pro Plan
-  scope: account
-  metric: requests
-  limit: 200 per minute
-  notes: Cloud Pro plan Stats API request rate (10x Standard).
-- name: Stats API - Self-Hosted
+  limit: 0
+  notes: API keys are not available on the Free/Basic tier.
+- name: Self-hosted
   scope: instance
   metric: requests
   limit: unlimited
-  notes: Self-hosted (AGPL-3.0) instances enforce no API rate limits.
-- name: Ingestion (/api/track)
-  scope: site
-  metric: events
-  limit: per-site ingestion controls
-  notes: Tracking ingestion is rate-controlled per site, distinct from Stats API per-minute limits.
+  notes: >-
+    Neither tier applies to a self-hosted instance, and no rate-limit headers
+    are sent.
+budgets:
+- credential: Organization key (rb_org_)
+  budget: The organization's. All of an organization's keys share it.
+- credential: Personal key
+  budget: >-
+    Yours. All of your personal keys share one budget, across every organization
+    you belong to. The quota follows the most generous plan among those
+    organizations.
+- credential: OAuth token (MCP)
+  budget: Yours — the same budget as your personal keys.
+responseHeaders:
+- header: X-RateLimit-Burst-Limit
+  meaning: Burst bucket size.
+- header: X-RateLimit-Burst-Remaining
+  meaning: Tokens left in the burst bucket.
+- header: X-RateLimit-Burst-Reset
+  meaning: Seconds until the burst bucket is full again.
+- header: X-RateLimit-Daily-Limit
+  meaning: Daily quota for this credential owner.
+- header: X-RateLimit-Daily-Remaining
+  meaning: Requests left today.
+- header: X-RateLimit-Daily-Reset
+  meaning: Seconds until 00:00 UTC.
+- header: RateLimit-Limit
+  meaning: Whichever of the two limits is closest to running out.
+- header: RateLimit-Remaining
+  meaning: Remaining on that closest limit.
+- header: RateLimit-Reset
+  meaning: Reset for that closest limit.
+- header: Retry-After
+  meaning: >-
+    Seconds to wait. ALWAYS present on a 429, even where the advisory headers
+    above are omitted.
+throttledResponse:
+  status: 429
+  body: '{"error":"Rate limit exceeded","scope":"daily","limit":5000,"retryAfter":34200}'
+  fields:
+    scope: burst | daily
+    limit: the limit that was hit
+    retryAfter: seconds, mirrored in the Retry-After header
 policies:
-- name: Plan-Tiered Limits
-  description: Cloud Stats API limits scale from Standard (20 rpm) to Pro (200 rpm); Enterprise is negotiated.
-- name: Self-Host Exemption
+- name: Two-dimensional limiting
+  description: >-
+    Every request is charged against both a shared burst bucket and a
+    plan-scaled daily quota; the response reports both.
+- name: Advisory headers
+  description: >-
+    Rate-limit headers are advisory — a few endpoints resolve credentials
+    outside the standard path and omit them — so clients must still handle a 429
+    without having seen a warning.
+- name: Per-owner, not per-key
+  description: >-
+    Minting extra keys divides an existing budget. Scale by plan, not by key
+    count.
+- name: Backoff by scope
+  description: >-
+    A burst rejection clears in about a second; a daily rejection lasts until
+    00:00 UTC. Read `scope` before retrying.
+- name: Self-host exemption
   description: Open-source self-hosted deployments are not rate limited.
-- name: Backoff Strategy
-  description: Clients should implement exponential backoff with jitter and honor 429 responses.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

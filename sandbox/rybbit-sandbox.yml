@@ -1,0 +1,73 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://rybbit.com/docs/api/getting-started ("API Playground"),
+  https://demo.rybbit.com (public live demo, HTTP 200 without credentials,
+  probed 2026-08-13), https://rybbit.com/docs/self-hosting (local instance),
+  https://rybbit.com/pricing (7-day free trial).
+description: >-
+  Rybbit is not a payments API, so there are no test cards, test tokens or
+  test-vs-live key prefixes. Its test surface is three real things: a public
+  read-only demo dashboard anyone can open without an account, an authenticated
+  in-dashboard API Playground that builds and runs real requests against your
+  own data, and a fully local self-hosted instance you can stand up with Docker
+  Compose and point an SDK at. No published fixture values exist and none are
+  invented here.
+test_live_separation:
+  supported: false
+  note: >-
+    There is no sandbox mode and no test-vs-live key prefix. API keys
+    (rb_org_ for organization keys, personal keys) address production data
+    directly. The safe substitute for a test key is a SCOPED key — create it
+    with a `permissions` object such as {"analytics": ["read"]} so an agent or
+    integration cannot write.
+surfaces:
+  - name: Public live demo
+    url: https://demo.rybbit.com
+    mirror: https://demo.rybbit.io
+    auth: none
+    http_status: 200
+    description: >-
+      A real, continuously updated Rybbit dashboard on Rybbit's own traffic,
+      open without an account. Used as the data source for the widget-embed
+      preview in the docs. Read-only exploration of the product surface, not the
+      API.
+  - name: API Playground
+    url: https://app.rybbit.io
+    location: Dashboard sidebar → "API Playground" (per site)
+    auth: required (logged-in session)
+    description: >-
+      Rybbit's own recommended way to explore the API before integrating.
+      Browses every endpoint, offers visual parameter controls including exact
+      time ranges, runs live requests against your real data, and generates
+      copyable code snippets. It is the closest thing Rybbit publishes to an API
+      console — and it is the reason there is no static reference console: the
+      provider ships no OpenAPI to render one from.
+  - name: Self-hosted local instance
+    url: https://rybbit.com/docs/self-hosting
+    auth: operator-controlled
+    description: >-
+      The AGPL-3.0 stack (TypeScript/Node server + ClickHouse + React client)
+      runs locally via the setup script or Docker Compose. A local instance is
+      unmetered and unrate-limited, which makes it the practical test
+      environment for integration work — including the MCP server, which the
+      same code exposes at <BASE_URL>/api/mcp.
+  - name: Free trial
+    url: https://rybbit.com/pricing
+    description: >-
+      7-day free trial on Rybbit Cloud with no credit-card charge until the
+      trial ends. Note that the docs state API keys are NOT available on the
+      Free/Basic tier — API access starts at Standard.
+test_values: []
+test_values_note: >-
+  Rybbit publishes no magic test identifiers, fixture site ids, or seeded
+  events. The only concrete value in the docs is the placeholder siteId "1" in
+  SDK initialization examples, which is illustrative, not a working test site.
+triggering_data:
+  method: >-
+    To produce test traffic, point the tracking script or an SDK at a throwaway
+    site id, or POST directly to /api/track with a `type` of pageview,
+    custom_event, performance, outbound or error. An API key on the ingestion
+    call bypasses bot detection and domain validation, which is what makes
+    synthetic test traffic land reliably.
+  docs: https://rybbit.com/docs/api/sending-events

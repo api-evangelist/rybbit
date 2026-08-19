@@ -1,0 +1,44 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Rybbit Sessions API
+  version: 1.0.0
+extends: openapi/rybbit-sessions-api-openapi.yml
+x-provenance:
+  generated: '2026-08-13'
+  method: generated
+  source: >-
+    API Evangelist enrichment pass 2026-08-13, from
+    https://rybbit.com/docs/api/getting-started and https://rybbit.com/docs/mcp.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-artifacts:
+        conventions: conventions/rybbit-conventions.yml
+        errors: errors/rybbit-problem-types.yml
+        rate_limits: rate-limits/rybbit-rate-limits.yml
+        scopes: scopes/rybbit-scopes.yml
+        crosswalk: mcp/rybbit-tool-crosswalk.yml
+      x-api-status: beta
+      x-pagination:
+        style: offset
+        params: [page, limit]
+      x-time-selection:
+        - [start_date, end_date, time_zone]
+        - [start_datetime, end_datetime, time_zone]
+        - [past_minutes_start, past_minutes_end]
+  - target: $.paths['/api/sites/{site}/sessions'].get
+    update:
+      x-mcp-tool: get_sessions
+      x-mcp-scope: 'sessions:read'
+  - target: $.paths['/api/sites/{site}/sessions/{sessionId}'].get
+    update:
+      x-mcp-tool: get_session
+      x-mcp-scope: 'sessions:read'
+  - target: $.paths['/api/sites/{site}/retention'].get
+    update:
+      x-mcp-tool: get_retention
+      x-mcp-scope: 'analytics:read'
+  - target: $.paths['/api/sites/{site}/session-locations'].get
+    update:
+      x-mcp-tool: null
+      x-surface-note: REST-only; no MCP tool exposes session locations.

@@ -1,0 +1,296 @@
+generated: '2026-08-13'
+method: searched
+status: published
+source: >-
+  https://rybbit.com/docs/mcp — Rybbit's own MCP documentation, cross-checked
+  against the live endpoint (POST https://app.rybbit.io/api/mcp returned HTTP
+  401 with a WWW-Authenticate: Bearer realm="rybbit-mcp" challenge on
+  2026-08-13), the RFC 9728 protected-resource document at
+  well-known/rybbit-oauth-protected-resource.json, and the published server
+  source at https://github.com/rybbit-io/rybbit/tree/master/server/src/mcp.
+description: >-
+  Rybbit ships a first-party HOSTED (remote) Model Context Protocol server as
+  part of the product — the same server code is in the AGPL-3.0 repository, so
+  a self-hosted instance exposes it at <BASE_URL>/api/mcp too. Transport is
+  Streamable HTTP. An agent authenticates either with a Rybbit API key sent as
+  `Authorization: Bearer <key>` or through the MCP authorization flow (OAuth
+  2.1 authorization code + PKCE with dynamic client registration), discovered
+  from /.well-known/oauth-protected-resource. Tools are filtered to the
+  credential's `resource:action` scopes and every call is re-authorized against
+  the user's organization role, so a tool list obtained anonymously is not
+  possible — tools/list is auth-gated (401). The tool inventory below is taken
+  verbatim from Rybbit's published MCP documentation and confirmed against the
+  tool registration source; input schemas are NOT recorded because they require
+  authenticated introspection.
+
+deployment:
+  mode: remote
+  endpoint: https://app.rybbit.io/api/mcp
+  auth: oauth
+  verified: probed
+  note: >-
+    Remote-only. Rybbit publishes no stdio/npx package — there is no
+    @rybbit/mcp on npm (checked 2026-08-13, 404). Self-hosters get the same
+    remote endpoint on their own host (https://<BASE_URL>/api/mcp), which is a
+    deployment of the provider's server, not a locally-installed client.
+
+server:
+  name: rybbit
+  transport: http
+  protocol: Streamable HTTP
+  url: https://app.rybbit.io/api/mcp
+  self_hosted_url_template: https://{BASE_URL}/api/mcp
+  auth:
+    - type: api-key
+      mechanism: 'Authorization: Bearer <RYBBIT_API_KEY>'
+      note: >-
+        Personal or organization API key. Query-string API keys are explicitly
+        NOT accepted on the MCP endpoint. Keys may be created with scoped
+        permissions ({"analytics": ["read"], "goals": ["read","write"]}), which
+        filters the visible tool list.
+    - type: oauth2
+      flow: authorization_code
+      pkce: S256
+      dynamic_client_registration: true
+      authorization_server: https://app.rybbit.io
+      protected_resource: well-known/rybbit-oauth-protected-resource.json
+      metadata: well-known/rybbit-oauth-authorization-server.json
+      scopes: scopes/rybbit-scopes.yml
+  probe:
+    url: https://app.rybbit.io/api/mcp
+    method: POST
+    body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    http_status: 401
+    www_authenticate: >-
+      Bearer realm="rybbit-mcp",
+      resource_metadata="https://app.rybbit.io/.well-known/oauth-protected-resource"
+    error: >-
+      {"jsonrpc":"2.0","error":{"code":-32001,"message":"Unauthorized: send a
+      Rybbit API key as 'Authorization: Bearer <key>' (Settings > Account >
+      Personal API Keys), or connect with an OAuth-capable MCP client."}}
+    fetched: '2026-08-13'
+  documented_clients:
+    - Claude Code
+    - Codex CLI
+    - Claude Desktop / claude.ai custom connector
+    - Cursor
+    - VS Code (Copilot agent mode)
+    - opencode
+
+tools_source: >-
+  https://rybbit.com/docs/mcp ("Available tools"), confirmed against
+  server/src/mcp/tools/*.ts in the AGPL-3.0 repository. Input schemas require
+  authenticated introspection and are not recorded here.
+tool_count: 38
+
+tools:
+  # --- Analytics (read) ---
+  - name: get_overview
+    category: analytics
+    scope: analytics:read
+    description: Sessions, pageviews, users, pages per session, bounce rate, and session duration.
+    rest: GET /api/sites/{site_id}/overview
+  - name: get_overview_timeseries
+    category: analytics
+    scope: analytics:read
+    description: The overview KPIs bucketed over time.
+    rest: GET /api/sites/{site_id}/overview/time-series
+  - name: get_breakdown
+    category: analytics
+    scope: analytics:read
+    description: Sessions broken down by one dimension (pages, referrers, countries, devices, UTM, ...).
+    rest: GET /api/sites/{site_id}/metric
+  - name: get_live_stats
+    category: analytics
+    scope: analytics:read
+    description: Visitors active on the site right now.
+    rest: GET /api/sites/{site_id}/live-user-count
+  - name: get_event_names
+    category: analytics
+    scope: events:read
+    description: Custom event names tracked on the site with counts.
+    rest: GET /api/sites/{site_id}/events/names
+  - name: get_errors
+    category: analytics
+    scope: analytics:read
+    description: JavaScript errors grouped by name/message with occurrence counts.
+    rest: GET /api/sites/{site_id}/errors/names
+  - name: get_web_vitals
+    category: analytics
+    scope: analytics:read
+    description: Core Web Vitals percentiles (LCP, CLS, INP, FCP, TTFB).
+    rest: GET /api/sites/{site_id}/performance/overview
+  - name: get_retention
+    category: analytics
+    scope: analytics:read
+    description: User retention cohort table.
+    rest: GET /api/sites/{site_id}/retention
+  - name: get_journeys
+    category: analytics
+    scope: analytics:read
+    description: Most common page-to-page navigation paths.
+    rest: GET /api/sites/{site_id}/journeys
+  # --- Sites ---
+  - name: list_sites
+    category: sites
+    scope: sites:read
+    description: List organizations and sites the key can access (call this first).
+    rest: GET /api/organizations
+  - name: get_site
+    category: sites
+    scope: sites:read
+    description: One site's full configuration.
+    rest: GET /api/sites/{site_id}
+  - name: create_site
+    category: sites
+    scope: sites:write
+    description: Add a new site to an organization (admin).
+    rest: POST /api/organizations/{organization_id}/sites
+  - name: update_site_config
+    category: sites
+    scope: sites:write
+    description: Change site settings — name, domain, tracking features, exclusions, tags (admin).
+    rest: PUT /api/sites/{site_id}/config
+  - name: delete_site
+    category: sites
+    scope: sites:write
+    description: Permanently delete a site and its data (admin, destructive).
+    rest: DELETE /api/sites/{site_id}
+  # --- Goals ---
+  - name: get_goals
+    category: goals
+    scope: goals:read
+    description: Conversion goals with conversion stats.
+    rest: GET /api/sites/{site_id}/goals
+  - name: create_goal
+    category: goals
+    scope: goals:write
+    description: Create a path, event, or autocapture goal.
+    rest: POST /api/sites/{site_id}/goals
+  - name: update_goal
+    category: goals
+    scope: goals:write
+    description: Replace a goal's definition.
+    rest: PUT /api/sites/{site_id}/goals/{goal_id}
+  - name: delete_goal
+    category: goals
+    scope: goals:write
+    description: Permanently delete a goal (destructive).
+    rest: DELETE /api/sites/{site_id}/goals/{goal_id}
+  # --- Funnels ---
+  - name: get_funnels
+    category: funnels
+    scope: funnels:read
+    description: Saved funnel definitions.
+    rest: GET /api/sites/{site_id}/funnels
+  - name: analyze_funnel
+    category: funnels
+    scope: funnels:read
+    description: Compute an ad-hoc funnel without saving it.
+    rest: POST /api/sites/{site_id}/funnels/analyze
+  - name: save_funnel
+    category: funnels
+    scope: funnels:write
+    description: Save a funnel, or update one by passing funnel_id.
+    rest: POST /api/sites/{site_id}/funnels
+  - name: delete_funnel
+    category: funnels
+    scope: funnels:write
+    description: Permanently delete a saved funnel (destructive).
+    rest: DELETE /api/sites/{site_id}/funnels/{funnel_id}
+  # --- People ---
+  - name: get_users
+    category: people
+    scope: users:read
+    description: Person inventory with per-user aggregates and traits (sortable, searchable).
+    rest: GET /api/sites/{site_id}/users
+  - name: get_user
+    category: people
+    scope: users:read
+    description: One person's profile — traits, linked devices, vitals, locations.
+    rest: GET /api/sites/{site_id}/users/{user_id}
+  - name: identify_user
+    category: people
+    scope: users:write
+    description: Link an anonymous device to your user ID and merge traits.
+    rest: POST /api/sites/{site_id}/users/identify
+  - name: update_user_traits
+    category: people
+    scope: users:write
+    description: Replace a person's traits wholesale.
+    rest: PUT /api/sites/{site_id}/users/{user_id}/traits
+  - name: delete_user
+    category: people
+    scope: users:write
+    description: GDPR erasure of one person's analytics data (admin, destructive).
+    rest: DELETE /api/sites/{site_id}/users/{user_id}
+  # --- Organization & teams ---
+  - name: list_members
+    category: organization
+    scope: org:read
+    description: Organization members with roles, site access, and teams.
+    rest: GET /api/organizations/{organization_id}/members
+  - name: add_member
+    category: organization
+    scope: org:write
+    description: Add an existing Rybbit user to the organization (admin).
+    rest: POST /api/organizations/{organization_id}/members
+  - name: update_member_site_access
+    category: organization
+    scope: org:write
+    description: Restrict a member to specific sites (admin).
+    rest: PUT /api/organizations/{organization_id}/members/{member_id}/sites
+  - name: list_teams
+    category: organization
+    scope: org:read
+    description: Teams with members and site access.
+    rest: GET /api/organizations/{organization_id}/teams
+  - name: create_team
+    category: organization
+    scope: org:write
+    description: Create a team (admin).
+    rest: POST /api/organizations/{organization_id}/teams
+  - name: update_team
+    category: organization
+    scope: org:write
+    description: Rename a team or replace its members/sites (admin).
+    rest: PUT /api/organizations/{organization_id}/teams/{team_id}
+  - name: delete_team
+    category: organization
+    scope: org:write
+    description: Permanently delete a team (admin, destructive).
+    rest: DELETE /api/organizations/{organization_id}/teams/{team_id}
+  # --- Raw data & SQL ---
+  - name: get_sessions
+    category: raw-data
+    scope: sessions:read
+    description: Recent visitor sessions with full attribution.
+    rest: GET /api/sites/{site_id}/sessions
+  - name: get_session
+    category: raw-data
+    scope: sessions:read
+    description: One session's detail plus its event timeline.
+    rest: GET /api/sites/{site_id}/sessions/{session_id}
+  - name: get_events
+    category: raw-data
+    scope: events:read
+    description: Raw recent events, newest first.
+    rest: GET /api/sites/{site_id}/events
+  - name: get_query_schema
+    category: raw-data
+    scope: sql:read
+    description: The ClickHouse schema and rules for run_query.
+    rest: null
+  - name: run_query
+    category: raw-data
+    scope: sql:read
+    description: Read-only ClickHouse SQL against the site-scoped scoped_events table.
+    rest: POST /api/organizations/{organization_id}/analytics/query
+
+permissions:
+  model: >-
+    Read tools work for any member with site access. Write tools need at least
+    member-level site access. Tools marked (admin) require the admin or owner
+    organization role; add_member can grant `owner` only from an owner's key.
+    Out-of-scope calls return 403 {"error":"Insufficient scope","required":"goals:write"}.
+  crosswalk: mcp/rybbit-tool-crosswalk.yml

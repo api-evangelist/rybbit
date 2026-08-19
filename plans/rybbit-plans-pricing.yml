@@ -3,9 +3,12 @@ specificationVersion: '0.1'
 schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Rybbit
 providerId: rybbit
+generated: '2026-08-13'
+method: searched
+source: https://rybbit.com/pricing
 created: '2026-06-21'
-modified: '2026-06-21'
-reconciled: false
+modified: '2026-08-13'
+reconciled: true
 tags:
 - Analytics
 - Web Analytics
@@ -14,30 +17,42 @@ tags:
 - Open Source
 - Plans
 description: >-
-  Rybbit offers two consumption models. The open-source edition (AGPL-3.0)
-  is free to self-host for personal or business use with no event caps or
-  rate limits. Rybbit Cloud is a managed, usage-based offering metered by
-  monthly pageviews (an "event" is a pageview or a custom event), with a
-  free tier and paid Standard, Pro, and Enterprise plans. Paid plans scale
-  the included pageview allowance (from 100K up to 20M+) along the same
-  monthly base price brackets.
+  Rybbit offers two consumption models. The open-source edition (AGPL-3.0) is
+  free to self-host for personal or business use with no event caps and no rate
+  limits. Rybbit Cloud is a usage-based subscription metered by monthly
+  pageviews (an "event" is a pageview or a custom event), sold through a
+  pageview slider that runs 100K → 250K → 500K → 1M → 2M → 5M → 10M → 20M →
+  30M → 40M → 50M → 50M+ and raises the monthly price as the volume rises. Paid
+  plans start at $13/month (Standard) and $26/month (Pro) at 100K pageviews
+  billed annually, with a 7-day free trial and no card charge until the trial
+  ends. Enterprise is negotiated.
 notes: >-
-  Pageview allowances and prices are the entry points published on the
-  Rybbit pricing page; the Standard and Pro plans use a slider that raises
-  the monthly price as the included pageview volume increases. Verify exact
-  bracket pricing on the pricing page during reconciliation.
+  Prices captured 2026-08-13 are the entry points of the slider at 100K monthly
+  pageviews on ANNUAL billing (the page also offers monthly billing, and
+  advertises "4 months free" on annual). Higher slider positions raise the
+  price; Rybbit does not publish the full bracket table, so only the entry
+  points are recorded. API access is a paid feature — the docs state API keys
+  are not available on the Free/Basic tier.
+plan_count: 5
 sources:
 - https://rybbit.com/pricing
+- https://rybbit.com/docs/api/getting-started
 - https://rybbit.com/docs/self-host-vs-cloud
 - https://github.com/rybbit-io/rybbit
+trial:
+  offered: true
+  length_days: 7
+  card_required: false
+  note: '"7-day free trial. Cancel anytime." No credit card charges until the trial ends.'
 plans:
 - id: rybbit-self-hosted
   name: Self-Hosted (Open Source)
   type: free
   description: >-
     The full open-source platform under AGPL-3.0, self-hosted on your own
-    infrastructure. No event caps and no API rate limits. Free for personal
-    and business use.
+    infrastructure. No event caps and no API rate limits. Free for personal and
+    business use. Includes the same REST API and the same hosted MCP server
+    endpoint on your own BASE_URL.
   entries:
   - label: Pageviews / Events
     name: self_hosted_events
@@ -53,35 +68,37 @@ plans:
   - name: Core Analytics Dashboard
   - name: Custom Events
   - name: Stats API
+  - name: MCP Server
   - name: Unlimited Sites
   - name: No Rate Limits
 - id: rybbit-free
-  name: Free (Cloud)
+  name: Free / Basic (Cloud)
   type: free
   description: >-
-    Managed cloud free tier with no credit card required.
+    Managed cloud entry tier. API keys are NOT available on this tier, so there
+    is no programmatic access — dashboard only.
   entries:
-  - label: Included Pageviews
-    name: free_pageviews
+  - label: API access
+    name: free_api
     type: free
-    metric: pageviews
-    limit: 3000
-    timeFrame: month
+    metric: requests
+    limit: 0
+    timeFrame: day
     geo: global
     unit: 1
     price: $0
     userMultiplied: false
   elements:
-  - name: 1 Website
   - name: Core Analytics Dashboard
   - name: Custom Events
-  - name: 6 Months Data Retention
+  - name: No API keys
 - id: rybbit-standard
   name: Standard (Cloud)
   type: paid
   description: >-
-    Entry paid cloud plan starting at $13/month for 100K monthly pageviews,
-    scaling up via a pageview slider.
+    "What a small business needs to get started." Entry paid cloud plan from
+    $13/month at 100K monthly pageviews (billed annually), scaling up the
+    pageview slider.
   entries:
   - label: Included Pageviews
     name: standard_pageviews
@@ -91,23 +108,39 @@ plans:
     timeFrame: month
     geo: global
     unit: 1
-    price: from $13/month (scales with pageview volume)
+    price: from $13/month billed annually (scales with pageview volume)
+    userMultiplied: false
+  - label: API daily quota
+    name: standard_api_daily
+    type: usage
+    metric: requests
+    limit: 5000
+    timeFrame: day
+    geo: global
+    unit: 1
+    price: included
     userMultiplied: false
   elements:
   - name: Up to 5 Websites
   - name: Up to 3 Team Members
   - name: 3 Years Data Retention
+  - name: Custom Events
   - name: Funnels, Goals, Journeys
   - name: Web Vitals
   - name: Bot Filtering
   - name: Error Tracking
-  - name: 20 requests/min API rate limit
+  - name: User Profiles
+  - name: Retention
+  - name: Email Reports
+  - name: API (5,000 requests/day, 50 req/10s burst)
+  - name: Email Support
 - id: rybbit-pro
   name: Pro (Cloud)
   type: paid
   description: >-
-    Recommended paid cloud plan starting at $26/month for 100K monthly
-    pageviews, scaling up via a pageview slider.
+    "Advanced features for professional teams." Recommended paid cloud plan from
+    $26/month at 100K monthly pageviews (billed annually), scaling up the
+    pageview slider.
   entries:
   - label: Included Pageviews
     name: pro_pageviews
@@ -117,21 +150,32 @@ plans:
     timeFrame: month
     geo: global
     unit: 1
-    price: from $26/month (scales with pageview volume)
+    price: from $26/month billed annually (scales with pageview volume)
+    userMultiplied: false
+  - label: API daily quota
+    name: pro_api_daily
+    type: usage
+    metric: requests
+    limit: 25000
+    timeFrame: day
+    geo: global
+    unit: 1
+    price: included
     userMultiplied: false
   elements:
+  - name: Everything in Standard
   - name: Unlimited Websites
   - name: Unlimited Team Members
   - name: 5 Years Data Retention
   - name: Session Replays
-  - name: 200 requests/min API rate limit (10x)
+  - name: API (25,000 requests/day — 5x Standard)
   - name: Priority Support
 - id: rybbit-enterprise
   name: Enterprise (Cloud)
   type: enterprise
   description: >-
     Custom plan with negotiated pageview volume, isolated deployment, and
-    additional governance features. Contact Rybbit sales.
+    additional governance features. Contact Rybbit.
   entries:
   - label: Enterprise Agreement
     name: enterprise
@@ -141,15 +185,20 @@ plans:
     timeFrame: year
     geo: global
     unit: 1
-    price: contact sales
+    price: contact us
     userMultiplied: false
   elements:
+  - name: Everything in Pro
   - name: Custom Pageview Volume
   - name: Infinite Data Retention
   - name: Single Sign-On (SSO)
   - name: Dedicated Isolated Instance
   - name: On-Premise Installation
   - name: Whitelabeling
+  - name: Custom Features
+  - name: Uptime SLA
+  - name: Manual Invoicing
+  - name: Enterprise + Slack Support
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

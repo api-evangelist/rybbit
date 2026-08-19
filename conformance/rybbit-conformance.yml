@@ -1,0 +1,137 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://rybbit.com/security (compliance and infrastructure claims),
+  https://rybbit.com/dpa, https://rybbit.com/docs/api/getting-started,
+  https://rybbit.com/docs/mcp, and the anonymous discovery documents saved under
+  well-known/ (probed 2026-08-13). Standards not claimed by Rybbit are recorded
+  as conforms: false with the reason, not omitted.
+description: >-
+  Which cross-cutting standards Rybbit's public surface actually conforms to.
+  The strongest results are on the agent/authorization side — Rybbit serves real
+  RFC 8414, RFC 9728 and OIDC discovery documents and runs an OAuth 2.1 flow
+  with PKCE and dynamic client registration for its MCP endpoint. The weakest
+  are on the API description side: no OpenAPI, no RFC 9457 errors, no RFC 8594
+  deprecation signalling.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      OAuth 2.1 authorization code flow at
+      https://app.rybbit.io/api/auth/mcp/authorize with S256 PKCE and refresh
+      tokens, advertised in a served RFC 8414 document.
+  - id: rfc8414-authorization-server-metadata
+    conforms: true
+    evidence: 'https://app.rybbit.io/.well-known/oauth-authorization-server returned 200 application/json (well-known/rybbit-oauth-authorization-server.json).'
+  - id: rfc9728-protected-resource-metadata
+    conforms: true
+    evidence: >-
+      https://app.rybbit.io/.well-known/oauth-protected-resource returned 200
+      naming https://app.rybbit.io/api/mcp as the resource; the MCP 401 carries
+      a matching WWW-Authenticate resource_metadata pointer.
+  - id: rfc7591-dynamic-client-registration
+    conforms: true
+    evidence: 'registration_endpoint https://app.rybbit.io/api/auth/mcp/register advertised in the RFC 8414 document.'
+  - id: rfc7636-pkce
+    conforms: true
+    evidence: 'code_challenge_methods_supported: ["S256"].'
+  - id: oidc
+    conforms: partial
+    evidence: >-
+      /.well-known/openid-configuration returns 200 with issuer, jwks_uri,
+      userinfo_endpoint, RS256 id_token signing and a claims_supported list —
+      but the body is byte-identical to the OAuth 8414 document and is scoped to
+      the MCP authorization server, not a general-purpose IdP.
+  - id: mcp
+    conforms: true
+    evidence: >-
+      Hosted Streamable HTTP MCP server at https://app.rybbit.io/api/mcp with 38
+      documented tools and the standard MCP authorization flow; probed 401 with
+      a spec-shaped Bearer challenge on 2026-08-13.
+  - id: rfc9116-security-txt
+    conforms: partial
+    evidence: >-
+      A real security.txt with Contact, Canonical, Preferred-Languages and
+      Expires is served at https://rybbit.com/security.txt (200) — but NOT at
+      the RFC-mandated /.well-known/security.txt, which 404s, including at the
+      Canonical URL the file itself declares.
+  - id: openapi
+    conforms: false
+    evidence: >-
+      No OpenAPI/Swagger document is published. Probed 2026-08-13:
+      /openapi.json, /openapi.yaml, /swagger.json, /api-docs and /redoc on
+      app.rybbit.io, rybbit.io and rybbit.com all return HTML shells or 404s,
+      and no spec exists in the 2,598-path public repository tree.
+  - id: asyncapi
+    conforms: false
+    evidence: 'No event, streaming or webhook surface is published for customers (see review.yml).'
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Errors use a flat {"error": "..."} JSON object, not application/problem+json.'
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: 'No Sunset/Deprecation headers and no deprecation policy are published.'
+  - id: idempotency
+    conforms: false
+    evidence: 'No idempotency key or replay semantics are documented on any write endpoint.'
+  - id: pagination
+    conforms: true
+    evidence: 'Offset pagination via page / limit / page_size on listing endpoints (documented in the API reference).'
+  - id: rate-limit-headers
+    conforms: true
+    evidence: >-
+      Responses carry both the vendor X-RateLimit-Burst-*/X-RateLimit-Daily-*
+      family and the draft-standard RateLimit-Limit / -Remaining / -Reset trio,
+      with Retry-After always present on 429.
+  - id: gdpr
+    conforms: true
+    evidence: >-
+      Rybbit states GDPR compliance on https://rybbit.com/security (no personal
+      data collection, no cookies, hashed and anonymized IPs, daily-rotating
+      user-agent salts) and publishes a Data Processing Agreement at
+      https://rybbit.com/dpa. EU-only data residency (Hetzner, Germany).
+  - id: ccpa
+    conforms: true
+    evidence: 'Stated on https://rybbit.com/security.'
+  - id: pecr
+    conforms: true
+    evidence: >-
+      Stated on https://rybbit.com/security — no cookies or local storage are
+      used for tracking, so no cookie banner is required in most jurisdictions.
+  - id: iso-27001
+    conforms: false
+    evidence: >-
+      Rybbit itself holds no ISO 27001 certification. The ISO 27001 claim on its
+      security page belongs to Hetzner, its hosting provider. See
+      security/rybbit-trust-center.yml.
+  - id: pci-dss
+    conforms: false
+    evidence: >-
+      Rybbit itself is not PCI DSS certified and states it never stores payment
+      details; the PCI DSS claim belongs to Stripe, its payment processor.
+  - id: soc2
+    conforms: false
+    evidence: No SOC 2 report or attestation is published.
+  - id: hipaa
+    conforms: false
+  - id: fedramp
+    conforms: false
+  - id: scim
+    conforms: false
+    evidence: 'No SCIM 2.0 provisioning surface; membership is managed through the organizations/teams endpoints.'
+  - id: json-api
+    conforms: false
+  - id: odata
+    conforms: false
+  - id: fhir-r4
+    conforms: false
+compliance_program:
+  published: true
+  url: https://rybbit.com/security
+  dpa: https://rybbit.com/dpa
+  regimes: [GDPR, CCPA, PECR]
+  certifications_held_by_rybbit: []
+  note: >-
+    Rybbit publishes a substantive compliance posture — regulatory regimes, a
+    DPA, data residency, retention and deletion windows — but holds no
+    third-party security certification of its own.

@@ -1,0 +1,778 @@
+{
+  "item": [
+    {
+      "id": "dad2c45a-ba82-4845-a137-24d490c92fcd",
+      "name": "Sessions",
+      "description": {
+        "content": "Session-level analytics and cohort retention.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4f445c39-8fd7-4f8e-b277-031540b502b0",
+          "name": "List sessions for a site.",
+          "request": {
+            "name": "List sessions for a site.",
+            "description": {
+              "content": "Returns a paginated list of sessions with their analytics data.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "time_zone",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "user_id",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "identified_only",
+                  "value": "<boolean>"
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1b646c0-12ff-4a50-b2a3-6fe83a1a5695",
+              "name": "A paginated list of sessions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "time_zone",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identified_only",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"session_id\": \"string\",\n      \"user_id\": \"string\",\n      \"identified_user_id\": \"string\",\n      \"traits\": {\n        \"key_0\": 9287\n      },\n      \"country\": \"string\",\n      \"region\": \"string\",\n      \"city\": \"string\",\n      \"browser\": \"string\",\n      \"operating_system\": \"string\",\n      \"device_type\": \"string\",\n      \"referrer\": \"string\",\n      \"channel\": \"string\",\n      \"entry_page\": \"string\",\n      \"exit_page\": \"string\",\n      \"pageviews\": 8440,\n      \"events\": 4423,\n      \"session_duration\": 7639.435208956979,\n      \"session_start\": \"1990-07-01T03:12:46.454Z\",\n      \"session_end\": \"1991-10-28T21:02:28.331Z\",\n      \"utm_source\": \"string\",\n      \"utm_medium\": \"string\",\n      \"utm_campaign\": \"string\"\n    },\n    {\n      \"session_id\": \"string\",\n      \"user_id\": \"string\",\n      \"identified_user_id\": \"string\",\n      \"traits\": {\n        \"key_0\": 1549\n      },\n      \"country\": \"string\",\n      \"region\": \"string\",\n      \"city\": \"string\",\n      \"browser\": \"string\",\n      \"operating_system\": \"string\",\n      \"device_type\": \"string\",\n      \"referrer\": \"string\",\n      \"channel\": \"string\",\n      \"entry_page\": \"string\",\n      \"exit_page\": \"string\",\n      \"pageviews\": 13,\n      \"events\": 9298,\n      \"session_duration\": 3179.849859773407,\n      \"session_start\": \"1966-04-04T17:15:37.905Z\",\n      \"session_end\": \"2025-01-03T18:02:23.253Z\",\n      \"utm_source\": \"string\",\n      \"utm_medium\": \"string\",\n      \"utm_campaign\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ed8203e7-8074-466b-b04f-224e64aba4ff",
+              "name": "Unauthorized - missing or invalid API key.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "time_zone",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identified_only",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0d4af0dc-742f-4d8d-b4ae-e8703f795ad0",
+              "name": "Forbidden - no access to site.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "time_zone",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "user_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "identified_only",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f690e1c6-644d-40e7-94c7-91e6a02d53aa",
+          "name": "Get a single session.",
+          "request": {
+            "name": "Get a single session.",
+            "description": {
+              "content": "Returns session-level detail including the ordered list of pageviews and events.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "sessions",
+                ":sessionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "sessionId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5ec8affb-f622-4abb-a99f-6b7520c1b7cf",
+              "name": "Session detail.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "sessions",
+                    ":sessionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "sessionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"session_id\": \"string\",\n  \"user_id\": \"string\",\n  \"identified_user_id\": \"string\",\n  \"traits\": {\n    \"key_0\": true\n  },\n  \"country\": \"string\",\n  \"region\": \"string\",\n  \"city\": \"string\",\n  \"browser\": \"string\",\n  \"operating_system\": \"string\",\n  \"device_type\": \"string\",\n  \"referrer\": \"string\",\n  \"channel\": \"string\",\n  \"entry_page\": \"string\",\n  \"exit_page\": \"string\",\n  \"pageviews\": 5486,\n  \"events\": 5226,\n  \"session_duration\": 4125.773389655791,\n  \"session_start\": \"1983-02-11T19:05:05.501Z\",\n  \"session_end\": \"1960-06-25T19:38:30.718Z\",\n  \"utm_source\": \"string\",\n  \"utm_medium\": \"string\",\n  \"utm_campaign\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df1d4c07-6850-4f12-96d5-210af98d469e",
+              "name": "Not Found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "sessions",
+                    ":sessionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "sessionId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c0fd9289-6a89-43cc-998a-4eed5026b1df",
+          "name": "List session locations.",
+          "request": {
+            "name": "List session locations.",
+            "description": {
+              "content": "Returns geographic location data for sessions, suitable for map visualizations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "session-locations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9f4323a9-0f2c-40c3-87dd-bbe1c66902a6",
+              "name": "Session location data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "session-locations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "493cab37-2173-44de-9d8f-67a530640cdf",
+          "name": "Get cohort retention.",
+          "request": {
+            "name": "Get cohort retention.",
+            "description": {
+              "content": "Returns cohort-based retention analysis. Users are grouped into cohorts by first visit and retention is tracked over subsequent time periods.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "sites",
+                ":site",
+                "retention"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>"
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>",
+                  "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "site",
+                  "description": "(Required) The site ID (string or number) scoping the query."
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "77fab576-694d-4822-b9c7-882302a0b24f",
+              "name": "Cohort retention data.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "sites",
+                    ":site",
+                    "retention"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "site",
+                      "description": "(Required) The site ID (string or number) scoping the query."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.rybbit.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f7aad2dc-e3b0-4cf5-9d3c-2d941c2a68b3",
+    "name": "Rybbit Analytics Sessions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.\n\nContact Support:\n Name: Rybbit",
+      "type": "text/plain"
+    }
+  }
+}

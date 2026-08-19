@@ -1,0 +1,27 @@
+generated: '2026-08-13'
+method: generated
+source: >-
+  Packaged Agent Skills generated from the OpenAPI in ../openapi/ and Rybbit's
+  published reference at https://rybbit.com/docs/api. Every operationId listed
+  below was verified verbatim in the referenced spec; cross-cutting rules cite
+  ../conventions/, ../errors/, ../rate-limits/, ../scopes/ and ../authentication/.
+  Rybbit publishes no AGENTS.md or skill files of its own (repository tree
+  searched 2026-08-13 — client/AGENTS.md and server/AGENTS.md are internal
+  contributor notes for Rybbit's own codebase, not API operating instructions).
+skills:
+  - file: rybbit-send-events.md
+    name: Send pageviews and custom events to Rybbit
+    api: openapi/rybbit-event-tracking-api-openapi.yml
+    operations: [trackEvent]
+  - file: rybbit-analyze-sessions.md
+    name: Analyze sessions and cohort retention for a Rybbit site
+    api: openapi/rybbit-sessions-api-openapi.yml
+    operations: [listSessions, getSession, listSessionLocations, getRetention]
+  - file: rybbit-profile-users.md
+    name: Profile identified users and their journeys in Rybbit
+    api: openapi/rybbit-analytics-api-openapi.yml
+    operations: [listUsers, getUser, listUserSessions, getUserSessionCount, getJourneys]
+  - file: rybbit-connect-mcp.md
+    name: Connect an agent to Rybbit's hosted MCP server
+    api: mcp/rybbit-mcp.yml
+    operations: [listSessions, getSession, listUsers, getUser, getRetention, getJourneys]

@@ -1,4 +1,4 @@
-generated: '2026-07-11'
+generated: '2026-08-13'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
@@ -17,7 +17,7 @@ hosts:
 - host: app.rybbit.io
   https: true
   tls_version: TLSv1.3
-  cert_expires: Sep 11 23:44:12 2026 GMT
+  cert_expires: Nov 10 09:11:55 2026 GMT
   hsts: false
 domains:
 - domain: rybbit.io
@@ -29,11 +29,11 @@ domains:
 - domain: rybbit.com
   dnssec: false
   caa:
-  - 0 issue "digicert.com; cansignhttpexchanges=yes"
-  - 0 issue "letsencrypt.org"
   - 0 issue "pki.goog; cansignhttpexchanges=yes"
   - 0 issue "ssl.com"
   - 0 issuewild "comodoca.com"
   - 0 issuewild "digicert.com; cansignhttpexchanges=yes"
+  - 0 issuewild "letsencrypt.org"
+  - 0 issuewild "pki.goog; cansignhttpexchanges=yes"
   spf: true
   dmarc: false

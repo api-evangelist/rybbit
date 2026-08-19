@@ -1,0 +1,168 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rybbit Analytics Sessions API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List sessions for a site.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/sessions",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "time_zone",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "identified_only",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of sessions with their analytics data."
+        },
+        {
+          "info": {
+            "name": "Get a single session.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/sessions/:sessionId",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "sessionId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns session-level detail including the ordered list of pageviews and events."
+        },
+        {
+          "info": {
+            "name": "List session locations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/session-locations",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+              }
+            ]
+          },
+          "docs": "Returns geographic location data for sessions, suitable for map visualizations."
+        },
+        {
+          "info": {
+            "name": "Get cohort retention.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/retention",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+              }
+            ]
+          },
+          "docs": "Returns cohort-based retention analysis. Users are grouped into cohorts by first visit and retention is tracked over subsequent time periods."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

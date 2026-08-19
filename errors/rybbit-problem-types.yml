@@ -1,0 +1,78 @@
+generated: '2026-08-13'
+method: searched
+format: rybbit-error-object
+source: >-
+  https://rybbit.com/docs/api/getting-started ("Error Responses" and the rate
+  limit section), https://rybbit.com/docs/mcp (insufficient-scope shape),
+  cross-checked against the 4xx responses declared in openapi/*.yml and against
+  two live unauthenticated probes of https://app.rybbit.io on 2026-08-13.
+description: >-
+  Rybbit does NOT use RFC 9457 application/problem+json. Errors are a flat JSON
+  object whose only guaranteed member is a human-readable `error` string; three
+  specific failures add machine-readable members on top of it. There is no
+  error code registry, no `type` URI, and no per-error documentation page.
+envelope:
+  media_type: application/json
+  shape: '{ "error": string }'
+  extended_shapes:
+    - context: insufficient scope
+      shape: '{ "error": "Insufficient scope", "required": "goals:write" }'
+    - context: rate limit exceeded
+      shape: '{ "error": "Rate limit exceeded", "scope": "burst"|"daily", "limit": number, "retryAfter": number }'
+    - context: unrouted path (Fastify router, not an application error)
+      shape: '{ "message": "Route GET:/api/... not found", "error": "Not Found", "statusCode": 404 }'
+problems:
+  - status: 400
+    title: Bad Request
+    meaning: Invalid parameters — a malformed filter array, an incomplete time selection, or a payload that failed validation.
+    remediation: >-
+      Send exactly one complete time selection (date, exact datetime, or
+      relative) and a valid JSON-encoded filters array; check field length caps
+      on ingestion payloads.
+    source_operation: openapi/rybbit-event-tracking-api-openapi.yml#trackEvent
+  - status: 401
+    title: Unauthorized
+    meaning: Missing or invalid API key / access token.
+    remediation: >-
+      Send `Authorization: Bearer <key>`. On the MCP endpoint the 401 carries a
+      WWW-Authenticate Bearer challenge pointing at
+      /.well-known/oauth-protected-resource.
+    source_operation: openapi/rybbit-sessions-api-openapi.yml#listSessions
+  - status: 403
+    title: Forbidden
+    meaning: >-
+      The credential is valid but has no access to the site, lacks the required
+      organization role (admin/owner), or is missing the required scope.
+    remediation: >-
+      Compare the credential's scopes against the operation and confirm the
+      user's role in the organization. The scope variant names what is missing
+      in `required`.
+    source_operation: openapi/rybbit-sessions-api-openapi.yml#listSessions
+  - status: 404
+    title: Not Found
+    meaning: The site (or other addressed resource) does not exist.
+    remediation: Resolve site and organization ids from GET /api/organizations before querying.
+    source_operation: openapi/rybbit-sessions-api-openapi.yml#getSession
+  - status: 429
+    title: Too Many Requests
+    meaning: >-
+      A burst or daily rate limit was exceeded. `scope` says which; a burst
+      rejection clears in about a second, a daily one lasts until 00:00 UTC.
+    remediation: >-
+      Honor Retry-After (always present on 429) and back off according to
+      `scope` — do not retry a daily rejection immediately. Requests refused by
+      the burst limit do not count against the daily quota. Cloud only;
+      self-hosted instances are not rate limited.
+    source_operation: openapi/rybbit-event-tracking-api-openapi.yml#trackEvent
+  - status: 500
+    title: Internal Server Error
+    meaning: An unhandled server-side failure.
+    remediation: Retry with backoff. No idempotency key exists, so a retried write may duplicate.
+gaps:
+  - No RFC 9457 problem+json media type.
+  - No stable machine-readable error codes outside the three extended shapes above.
+  - No error reference page enumerating individual failure conditions.
+x-evidence:
+  - {url: 'https://app.rybbit.io/api/mcp', method: POST, http_status: 401, note: 'JSON-RPC error -32001 with WWW-Authenticate Bearer realm="rybbit-mcp"'}
+  - {url: 'https://app.rybbit.io/api/openapi.json', method: GET, http_status: 404, note: 'Fastify router 404 envelope observed verbatim'}
+x-evidence-fetched: '2026-08-13'

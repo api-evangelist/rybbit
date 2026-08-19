@@ -1,16 +1,84 @@
-generated: '2026-07-11'
-method: derived
+generated: '2026-08-13'
+method: searched
 source: openapi/rybbit-openapi.yml
+docs: https://rybbit.com/docs/api/getting-started
+description: >-
+  Rybbit authenticates every API and MCP request with one of three credentials:
+  an organization API key, a personal API key, or an OAuth 2.1 access token
+  issued by Rybbit's own authorization server for the hosted MCP endpoint. The
+  OpenAPI in this repo only expresses the bearer scheme; the rest of this
+  profile was read from Rybbit's published auth documentation and the RFC 8414
+  / RFC 9728 discovery documents saved under well-known/.
 summary:
-  types:
-  - http
+  types: [http, oauth2]
+  http_schemes: [bearer]
+  api_key_in: [header, query]
+  oauth2_flows: [authorizationCode]
+  scopes: 29
 schemes:
-- name: bearerAuth
-  type: http
-  scheme: bearer
-  description: 'User-scoped API key with organization-level access. Keys begin with "rb_" and
-    are 35 characters long. Send as `Authorization: Bearer [example key]`. A `?api_key=` query parameter
-    is also accepted for quick testing only. API keys and rate limits apply to the Stats API
-    on Rybbit Cloud; self-hosted instances have no rate limits.'
-  sources:
-  - openapi/rybbit-openapi.yml
+  - name: bearerAuth
+    type: http
+    scheme: bearer
+    description: >-
+      User- or organization-scoped API key sent as `Authorization: Bearer <key>`.
+      Organization keys (prefix `rb_org_`) belong to the organization, reach every
+      site in it, and survive staff turnover; only organization admins/owners can
+      create them (Settings > Organization > Organization API Keys). Personal keys
+      act as the individual user with exactly their access across every
+      organization they belong to (Settings > Account > Personal API Keys) and are
+      the recommended credential for MCP clients. Either kind can be created with
+      a `permissions` object restricting it to `resource:action` scopes; leave
+      restrictions off for a full-access key. Keys are shown once at creation.
+    sources:
+      - openapi/rybbit-openapi.yml
+      - https://rybbit.com/docs/api/getting-started
+      - https://rybbit.com/docs/account-settings
+  - name: apiKeyQuery
+    type: apiKey
+    in: query
+    parameter: api_key
+    description: >-
+      `?api_key=<key>` is accepted on the Stats API for quick testing ONLY —
+      Rybbit's own docs warn it leaks the key into server logs and browser
+      history. It is NOT accepted on the MCP endpoint.
+    deprecated_for_production: true
+    sources:
+      - https://rybbit.com/docs/api/getting-started
+  - name: RybbitMCP
+    type: oauth2
+    description: >-
+      OAuth 2.1 authorization code + PKCE (S256) with RFC 7591 dynamic client
+      registration, used by MCP clients that support the MCP authorization flow
+      (Claude Code, Codex, Claude Desktop, opencode). Discovered from
+      /.well-known/oauth-protected-resource on the API host. Tokens act with the
+      granting user's role and share that user's rate-limit budget.
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://app.rybbit.io/api/auth/mcp/authorize
+        tokenUrl: https://app.rybbit.io/api/auth/mcp/token
+        scopes: 29
+    detail: scopes/rybbit-scopes.yml
+    sources:
+      - well-known/rybbit-oauth-authorization-server.json
+      - well-known/rybbit-oauth-protected-resource.json
+      - https://rybbit.com/docs/mcp
+ingestion:
+  endpoint: POST /api/track
+  auth: optional
+  note: >-
+    The public ingestion endpoint accepts unauthenticated writes from the
+    tracking script (the site is resolved from `site_id`). An API key is
+    optional but recommended for server-side tracking because it bypasses bot
+    detection and domain validation.
+authorization:
+  model: role + scope
+  roles: [member, admin, owner]
+  note: >-
+    Scopes filter what a credential MAY attempt; the organization role still
+    decides what it MAY DO. Admin/owner-only operations refuse a member-role
+    credential with 403 regardless of scope.
+self_hosted:
+  note: >-
+    Self-hosted (AGPL-3.0) instances run the same auth stack on the operator's
+    own BASE_URL, including the MCP authorization server at
+    /api/auth/mcp/* and the well-known documents.

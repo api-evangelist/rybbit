@@ -1,0 +1,103 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/rybbit-io/rybbit/releases
+description: >-
+  Rybbit publishes no dedicated changelog page on its website. The dated,
+  authoritative record of what changed is the GitHub Releases feed on the
+  AGPL-3.0 monorepo, which covers the whole product — cloud and self-hosted
+  alike — because both run the same code. Recent window only; the feed is the
+  source of truth.
+scheme: semver
+current_version: v2.8.0
+current_released: '2026-07-27'
+feed: https://github.com/rybbit-io/rybbit/releases.atom
+api_changelog: null
+api_changelog_note: >-
+  There is no API-specific changelog. API changes surface inside product release
+  notes (e.g. organization-scoped API keys in v2.8.0, "official API and
+  interactive API query builder" in v2.3.0), and the API is self-declared beta
+  with no versioning contract — see lifecycle/rybbit-lifecycle.yml.
+entries:
+  - version: v2.8.0
+    date: '2026-07-27'
+    breaking: false
+    api_relevant: true
+    highlights:
+      - Hosted MCP server shipped (https://rybbit.com/docs/mcp).
+      - Organization-scoped API keys added alongside personal keys.
+      - User-identification overhaul — sessions keyed per identified user, so shared IP/browser visitors no longer collapse into one session.
+      - Bot detection tuned to reduce client-side false positives.
+      - Traffic exclusions extended to ASN and query parameters.
+      - Autocapture events (button clicks, form events) usable in goals and funnels.
+  - version: v2.7.0
+    date: '2026-07-07'
+    breaking: false
+    api_relevant: true
+    highlights:
+      - React Native SDK released (@rybbit/react-native) with an App Analytics mode for mobile sites.
+      - Bot blocking v2 — ASN data, user-agent patterns, header heuristics, anomaly scoring.
+      - Ingestion performance work — Redis-backed session tracking, cached user-agent parsing, batched event queues.
+      - Session replay timeline redesign.
+      - Per-site traffic exclusion by path, hostname, and user agent (wildcards).
+  - version: v2.6.0
+    date: '2026-05-14'
+    breaking: false
+    api_relevant: true
+    highlights:
+      - Rollup view across all sites in an organization or team.
+      - Embeddable analytics counter widget (see components/rybbit-components.yml).
+      - Minute-granularity time filter.
+      - Chart drag-select and a reworked filter UI.
+  - version: v2.5.0
+    date: '2026-03-29'
+    breaking: false
+    api_relevant: false
+    highlights:
+      - Teams added to subdivide organizations into groups of users and sites.
+      - Tagging for slicing analytics into cohorts.
+      - Improved bot blocking.
+  - version: v2.4.0
+    date: '2026-02-11'
+    breaking: false
+    api_relevant: true
+    highlights:
+      - Four autocapture event types added — Button Click, Form Submission, Copy, Input Change.
+      - Revamped events, journeys and funnels UI; user traits explorer added.
+      - Event property filters for goals and funnels.
+      - More rrweb configuration exposed in the tracking script.
+  - version: v2.3.1
+    date: '2026-01-02'
+    breaking: false
+    api_relevant: false
+    highlights:
+      - Fixes globe data loading.
+  - version: v2.3.0
+    date: '2026-01-02'
+    breaking: false
+    api_relevant: true
+    highlights:
+      - 'The official API and the in-dashboard interactive API query builder (API Playground) shipped — this is the release the public Stats API dates from.'
+  - version: v2.2.3
+    date: '2025-12-12'
+    breaking: false
+    api_relevant: false
+    highlights:
+      - Next.js updated to 15.5.9 for security fixes.
+  - version: v2.2.2
+    date: '2025-12-06'
+    breaking: false
+    api_relevant: false
+    highlights:
+      - Next.js updated to 16.0.7 for CVE-2025-66478.
+  - version: v2.2.0
+    date: '2025-11-22'
+    breaking: false
+    api_relevant: false
+    highlights:
+      - Light mode added.
+prior_breaking_change:
+  version: v1.0
+  guide: https://rybbit.com/docs/v1-migration
+  summary: >-
+    The backend began expecting the /api/ prefix intact; custom reverse proxies
+    had to drop their path-rewrite rules. Affects self-hosters only.

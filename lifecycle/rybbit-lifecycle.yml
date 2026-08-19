@@ -1,0 +1,87 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://rybbit.com/docs/api/getting-started (beta notice),
+  https://rybbit.com/docs/v1-migration (breaking-change guide),
+  https://github.com/rybbit-io/rybbit/releases (dated product releases),
+  https://github.com/rybbit-io/rybbit/blob/master/SECURITY.md (supported
+  version lines), https://rybbit.com/security (data-deletion window),
+  https://rybbit.com/pricing (SLA availability). Probed 2026-08-13.
+description: >-
+  Rybbit versions the PRODUCT, not the API. There is no version segment in any
+  path, no version header, no dated release train, and no RFC 8594
+  Sunset/Deprecation header support. The HTTP API is self-declared beta, and
+  the provider's own reference warns that breaking changes may ship. This is an
+  honest record of what does and does not exist.
+
+versioning:
+  scheme: none
+  mechanism: null
+  current: unversioned
+  api_status: beta
+  api_status_quote: >-
+    "The API is currently in beta. There may be breaking changes as we continue
+    to improve and expand the API."
+  docs: https://rybbit.com/docs/api/getting-started
+  product_versioning:
+    scheme: semver
+    current: v2.8.0
+    released: '2026-07-27'
+    source: https://github.com/rybbit-io/rybbit/releases
+    note: >-
+      Product releases are tagged and dated on GitHub and are the closest thing
+      to an API changelog; see changelog/rybbit-changelog.yml.
+
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation policy, no notice window, and no Sunset/Deprecation response
+    headers are published for the API. The only formal end-of-life statement is
+    a security-support table in SECURITY.md covering software release lines
+    (0.1.x unsupported, 1.x unsupported, 2.x supported) — a self-host patching
+    policy, not an API deprecation policy. No Deprecation pointer is emitted.
+  breaking_change_precedent:
+    url: https://rybbit.com/docs/v1-migration
+    summary: >-
+      The v1.0 release changed the reverse-proxy contract — the backend now
+      expects the /api/ prefix intact — and shipped a written migration guide
+      naming exactly what to remove from Nginx/Apache configs. Precedent for
+      documented breaking changes, not a standing policy.
+
+sla:
+  url: null
+  public_uptime_target: null
+  note: >-
+    The pricing comparison table lists "Uptime SLA" as an Enterprise-only line
+    item; no numeric uptime target is published for Standard or Pro.
+
+status_page: null
+status_page_note: >-
+  Rybbit publishes no status page. Probed 2026-08-13: status.rybbit.io and
+  status.rybbit.com do not resolve (curl exit, no HTTP response). No
+  StatusPage pointer is emitted.
+
+data_lifecycle:
+  retention_by_plan:
+    standard: 3 years
+    pro: 5 years
+    enterprise: infinite
+  deletion_after_cancellation: >-
+    Analytics data is permanently deleted within 60 days of cancellation and
+    cannot be recovered (https://rybbit.com/security).
+  per_person_erasure: >-
+    GDPR erasure of one person's analytics data is available as an
+    admin/destructive operation (MCP delete_user).
+
+deprecated_operations: []
+deprecated_operations_note: >-
+  No operation in openapi/*.yml carries deprecated: true, and Rybbit's
+  reference marks none.
+
+gaps_for_the_provider:
+  - Publish a version strategy (path segment, header, or dated train) before leaving beta.
+  - Adopt RFC 8594 Sunset/Deprecation headers, or state a written notice window.
+  - Publish a status page; there is currently no public availability signal.
+  - Publish a numeric uptime target for paid cloud plans, not only Enterprise.

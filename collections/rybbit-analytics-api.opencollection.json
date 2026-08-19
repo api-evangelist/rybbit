@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rybbit Analytics API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Analytics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List users for a site.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/users",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+              }
+            ]
+          },
+          "docs": "List users for a site."
+        },
+        {
+          "info": {
+            "name": "Get a single user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/users/:userId",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single user."
+        },
+        {
+          "info": {
+            "name": "List sessions for a user.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/users/:userId/sessions",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "userId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "List sessions for a user."
+        },
+        {
+          "info": {
+            "name": "Get per-user session counts.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/users/session-count",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+              }
+            ]
+          },
+          "docs": "Get per-user session counts."
+        },
+        {
+          "info": {
+            "name": "Get user journeys.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.rybbit.io/api/sites/:site/journeys",
+            "params": [
+              {
+                "name": "site",
+                "value": "",
+                "type": "path",
+                "description": "The site ID (string or number) scoping the query."
+              },
+              {
+                "name": "filters",
+                "value": "",
+                "type": "query",
+                "description": "JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties."
+              }
+            ]
+          },
+          "docs": "Returns common navigation paths (journeys) users take through the site."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
