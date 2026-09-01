@@ -132,6 +132,9 @@ apis:
   - type: Documentation
     url: https://rybbit.com/docs/api/sessions/list
 common:
+- type: License
+  name: AGPL-3.0
+  url: https://github.com/rybbit-io/rybbit/blob/master/LICENSE
 - type: AgenticAccess
   url: agentic-access/rybbit-agentic-access.yml
 - type: TrustCenter
