@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Rybbit Analytics API
   description: Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.
@@ -26,7 +26,7 @@ paths:
       operationId: listUsers
       tags:
       - Analytics
-      summary: List users for a site.
+      summary: List users for a site
       parameters:
       - $ref: '#/components/parameters/Site'
       - name: page
@@ -46,7 +46,7 @@ paths:
       operationId: getUser
       tags:
       - Analytics
-      summary: Get a single user.
+      summary: Get a single user
       parameters:
       - $ref: '#/components/parameters/Site'
       - name: userId
@@ -62,7 +62,7 @@ paths:
       operationId: listUserSessions
       tags:
       - Analytics
-      summary: List sessions for a user.
+      summary: List sessions for a user
       parameters:
       - $ref: '#/components/parameters/Site'
       - name: userId
@@ -78,7 +78,7 @@ paths:
       operationId: getUserSessionCount
       tags:
       - Analytics
-      summary: Get per-user session counts.
+      summary: Get per-user session counts
       parameters:
       - $ref: '#/components/parameters/Site'
       - $ref: '#/components/parameters/Filters'
@@ -90,7 +90,7 @@ paths:
       operationId: getJourneys
       tags:
       - Analytics
-      summary: Get user journeys.
+      summary: Get user journeys
       description: Returns common navigation paths (journeys) users take through the site.
       parameters:
       - $ref: '#/components/parameters/Site'

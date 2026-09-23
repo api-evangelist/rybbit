@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Rybbit Analytics Event Tracking API
+  title: Rybbit Event Tracking API
   description: Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.
   termsOfService: https://www.rybbit.io/terms
   contact:
@@ -26,7 +26,7 @@ paths:
       operationId: trackEvent
       tags:
       - Event Tracking
-      summary: Send a pageview or custom event.
+      summary: Send a pageview or custom event
       description: Public ingestion endpoint used by the Rybbit tracking script and server-side / mobile integrations. No API key is required for basic tracking; the server validates the payload, resolves the site by site_id, and applies rate limiting. The `type` field selects the event kind (pageview, custom_event, or outbound).
       security: []
       requestBody:

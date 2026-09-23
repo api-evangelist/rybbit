@@ -1,6 +1,6 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Rybbit Analytics Sessions API
+  title: Rybbit Sessions API
   description: Rybbit is an open-source, privacy-friendly web and product analytics platform. This specification covers the public event ingestion endpoint (POST /api/track) used by the tracking script and server-side integrations, and the Bearer-key-authenticated Stats API (beta) for querying sites, sessions, users, retention, and events. The cloud base URL is https://app.rybbit.io; self-hosted instances expose the same paths on their own domain.
   termsOfService: https://www.rybbit.io/terms
   contact:
@@ -26,7 +26,7 @@ paths:
       operationId: listSessions
       tags:
       - Sessions
-      summary: List sessions for a site.
+      summary: List sessions for a site
       description: Returns a paginated list of sessions with their analytics data.
       parameters:
       - $ref: '#/components/parameters/Site'
@@ -84,7 +84,7 @@ paths:
       operationId: getSession
       tags:
       - Sessions
-      summary: Get a single session.
+      summary: Get a single session
       description: Returns session-level detail including the ordered list of pageviews and events.
       parameters:
       - $ref: '#/components/parameters/Site'
@@ -107,7 +107,7 @@ paths:
       operationId: listSessionLocations
       tags:
       - Sessions
-      summary: List session locations.
+      summary: List session locations
       description: Returns geographic location data for sessions, suitable for map visualizations.
       parameters:
       - $ref: '#/components/parameters/Site'
@@ -120,7 +120,7 @@ paths:
       operationId: getRetention
       tags:
       - Sessions
-      summary: Get cohort retention.
+      summary: Get cohort retention
       description: Returns cohort-based retention analysis. Users are grouped into cohorts by first visit and retention is tracked over subsequent time periods.
       parameters:
       - $ref: '#/components/parameters/Site'
@@ -139,21 +139,6 @@ paths:
         '200':
           description: Cohort retention data.
 components:
-  parameters:
-    Filters:
-      name: filters
-      in: query
-      required: false
-      description: JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties.
-      schema:
-        type: string
-    Site:
-      name: site
-      in: path
-      required: true
-      description: The site ID (string or number) scoping the query.
-      schema:
-        type: string
   schemas:
     Session:
       type: object
@@ -205,6 +190,21 @@ components:
           type: string
         utm_campaign:
           type: string
+  parameters:
+    Filters:
+      name: filters
+      in: query
+      required: false
+      description: JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties.
+      schema:
+        type: string
+    Site:
+      name: site
+      in: path
+      required: true
+      description: The site ID (string or number) scoping the query.
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

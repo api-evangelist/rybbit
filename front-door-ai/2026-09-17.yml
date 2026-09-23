@@ -1,0 +1,29 @@
+# Front Door AI Index — rybbit — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: rybbit
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.rybbit.io
+  final_host: rybbit.com
+  ownership: own
+  owner: rybbit
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 6
+  host_score: 6
+  density: 3.87
+  words: 1552
+  tiers:
+    agentic: 3
+    core: 2
+    model: 1
+  ambiguous: 1
+  top_terms:
+    AI: 2
+    MCP: 2
+    AI assistant: 1
+    Claude: 1
+    agent: 1
