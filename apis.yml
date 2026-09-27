@@ -46,7 +46,7 @@ tags:
 - Web Analytics
 - Product Analytics
 - Privacy
-- Open-Source
+- Open Source
 - Cookieless
 tags_raw:
 - Analytics
@@ -55,6 +55,7 @@ tags_raw:
 - Privacy
 - Open Source
 - Cookieless
+- Open-Source
 created: '2026-06-21'
 modified: '2026-08-13'
 specificationVersion: '0.23'

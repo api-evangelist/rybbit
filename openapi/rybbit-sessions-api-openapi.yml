@@ -139,6 +139,21 @@ paths:
         '200':
           description: Cohort retention data.
 components:
+  parameters:
+    Filters:
+      name: filters
+      in: query
+      required: false
+      description: JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties.
+      schema:
+        type: string
+    Site:
+      name: site
+      in: path
+      required: true
+      description: The site ID (string or number) scoping the query.
+      schema:
+        type: string
   schemas:
     Session:
       type: object
@@ -190,21 +205,6 @@ components:
           type: string
         utm_campaign:
           type: string
-  parameters:
-    Filters:
-      name: filters
-      in: query
-      required: false
-      description: JSON-encoded array of filter objects to narrow results by browser, device, location, page data, UTM parameters, or user/event properties.
-      schema:
-        type: string
-    Site:
-      name: site
-      in: path
-      required: true
-      description: The site ID (string or number) scoping the query.
-      schema:
-        type: string
   securitySchemes:
     bearerAuth:
       type: http
