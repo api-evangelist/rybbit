@@ -1,0 +1,45 @@
+slug: rybbit
+provider: Rybbit
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: Event Tracking
+  spec_file: rybbit-event-tracking-api-openapi.yml
+  capability_id: BC-4280.10
+  capability_id_l1: BC-4280
+  capability_name: Product Telemetry Instrumentation
+  confidence: 0.82
+  evidence: POST /api/track trackEvent 'Send a pageview or custom event'; schema TrackRequest; 'public
+    event ingestion endpoint (POST /api/track) used by the tracking script'
+  reason: Ingestion of product/web usage events from client and server runtimes is exactly Product Telemetry
+    Instrumentation.
+- tag: Analytics
+  spec_file: rybbit-analytics-api-openapi.yml
+  capability_id: BC-4280.30
+  capability_id_l1: BC-4280
+  capability_name: Product Usage Analytics
+  confidence: 0.8
+  evidence: GET /api/sites/{site}/users/{userId}/sessions listUserSessions; GET /api/sites/{site}/journeys
+    getJourneys 'Get user journeys'
+  reason: Vendor is a 'privacy-friendly web and product analytics platform'; these read endpoints deliver
+    analytical views of product/site usage (users, sessions, journeys), matching Product Usage Analytics.
+- tag: Sessions
+  spec_file: rybbit-sessions-api-openapi.yml
+  capability_id: BC-4280.30
+  capability_id_l1: BC-4280
+  capability_name: Product Usage Analytics
+  confidence: 0.78
+  evidence: GET /api/sites/{site}/sessions listSessions 'List sessions for a site'; GET /api/sites/{site}/retention
+    'Get cohort retention'
+  reason: Session listing and cohort retention queries are analytical views of product usage, matching
+    Product Usage Analytics (funnels, retention cohorts).
