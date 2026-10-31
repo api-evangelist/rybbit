@@ -1,4 +1,4 @@
-# Rybbit (rybbit)
+# Rybbit
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,122 +64,159 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Rybbit is an open-source, privacy-friendly web and product analytics platform positioned as a cookieless alternative to Google Analytics and Plausible. It ingests pageviews and custom events through a lightweight tracking script and HTTP /api/track endpoint, and exposes a Bearer-key-authenticated Stats API for sites, sessions, users, retention, and events. Rybbit can be self-hosted under AGPL-3.0 or consumed as a managed cloud service.
+Rybbit is an open-source, privacy-friendly web and product analytics platform positioned as a cookieless alternative to Google Analytics and Plausible. It ingests pageviews, custom events, autocaptured interactions, performance samples and JavaScript errors through a lightweight tracking script and an HTTP /api/track endpoint, and exposes a Bearer-key-authenticated Stats and Management API covering sites, sessions, users, goals, funnels, web vitals, session replays, organizations and teams. Since v2.8.0 Rybbit also runs a first-party hosted Model Context Protocol server at https://app.rybbit.io/api/mcp — 38 tools behind an OAuth 2.1 authorization server with PKCE, dynamic client registration and a 29-scope resource:action permission model — making it directly callable by AI agents. Rybbit publishes no OpenAPI. It can be self-hosted under AGPL-3.0, which ships the identical REST and MCP surface, or consumed as a managed cloud service.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/rybbit/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/rybbit/refs/heads/main/apis.yml)
+**Areas:** Analytics · Web Analytics · Product Analytics · Privacy · Open Source · Cookieless
 
-## Tags
+## Rybbit on APIs.io
 
-- Analytics
-- Web Analytics
-- Product Analytics
-- Privacy
-- Open Source
-- Cookieless
+Everything profiled for Rybbit is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/rybbit/](https://apis.io/providers/rybbit/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (3)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Rybbit Analytics API](https://apis.io/apis/rybbit/rybbit-analytics-api/) — Stats API for events and reporting per site.
+- [Rybbit Event Tracking API](https://apis.io/apis/rybbit/rybbit-event-tracking-api/) — Public ingestion endpoint for pageviews and custom events.
+- [Rybbit Sessions API](https://apis.io/apis/rybbit/rybbit-sessions-api/) — Session-level analytics and cohort retention.
 
-## APIs
+### Published properties
 
-### Rybbit Event Tracking API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Public ingestion endpoint (POST /api/track) used by the Rybbit tracking script and server-side integrations to send pageviews, custom events, and outbound link events. Accepts site_id, event type, page context, and a JSON properties payload; no API key is required for basic tracking.
+#### MCP servers (1)
 
-- **Human URL:** [https://rybbit.com/docs/api/sending-events](https://rybbit.com/docs/api/sending-events)
-- **Base URL:** `https://app.rybbit.io/api`
+Model Context Protocol servers that expose the API to agents.
 
-#### Tags
+- [rybbit](https://apis.io/servers/rybbit/rybbit/)
 
-- Event Tracking
-- Ingestion
-- Pageviews
-- Custom Events
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Documentation](https://rybbit.com/docs/api/sending-events)
-- [Documentation](https://rybbit.com/docs/script)
-- [OpenAPI](openapi/rybbit-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/rybbit.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/rybbit.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Rybbit Agentic Access](https://apis.io/agentic-access/rybbit/rybbit-agentic-access/)
 
-### Rybbit Sites API
+#### Collections (4)
 
-Management endpoints for organizations and sites that scope all analytics queries. Sites are addressed by site ID in the /api/sites/:site path prefix used across the Stats API.
+Postman and Open Collection request collections.
 
-- **Human URL:** [https://rybbit.com/docs/api/getting-started](https://rybbit.com/docs/api/getting-started)
-- **Base URL:** `https://app.rybbit.io/api`
+- [Rybbit API](https://apis.io/collections/rybbit/open-rybbit/)
+- [Rybbit Analytics API](https://apis.io/collections/rybbit/open-rybbit-analytics-api/)
+- [Rybbit Analytics Event Tracking API](https://apis.io/collections/rybbit/open-rybbit-event-tracking-api/)
+- [Rybbit Analytics Sessions API](https://apis.io/collections/rybbit/open-rybbit-sessions-api/)
 
-#### Tags
+#### Overlays (6)
 
-- Sites
-- Management
-- Organizations
+OpenAPI overlays, including conversational phrasing for each operation.
 
-#### Properties
+- [Rybbit Analytics Api Overlay](https://apis.io/overlays/rybbit/rybbit-analytics-api-overlay/)
+- [Rybbit Analytics Api Phrasing Overlay](https://apis.io/overlays/rybbit/rybbit-analytics-api-phrasing-overlay/)
+- [Rybbit Event Tracking Api Overlay](https://apis.io/overlays/rybbit/rybbit-event-tracking-api-overlay/)
+- [Rybbit Event Tracking Api Phrasing Overlay](https://apis.io/overlays/rybbit/rybbit-event-tracking-api-phrasing-overlay/)
+- [Rybbit Sessions Api Overlay](https://apis.io/overlays/rybbit/rybbit-sessions-api-overlay/)
+- [Rybbit Sessions Api Phrasing Overlay](https://apis.io/overlays/rybbit/rybbit-sessions-api-phrasing-overlay/)
 
-- [Documentation](https://rybbit.com/docs/api/getting-started)
-- [OpenAPI](openapi/rybbit-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/rybbit.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/rybbit.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Security (4)
 
-### Rybbit Analytics Stats API
+Authentication, trust centre, and vulnerability disclosure.
 
-Bearer-key-authenticated read API (beta) for querying analytics per site - events, users, journeys, and supporting stats - under the /api/sites/:site path. Supports date-range or relative time parameters and a JSON-encoded filters array.
+- [Rybbit Authentication](https://apis.io/security/rybbit/rybbit-authentication/)
+- [Rybbit Domain Security](https://apis.io/security/rybbit/rybbit-domain-security/)
+- [Rybbit Trust Center](https://apis.io/security/rybbit/rybbit-trust-center/)
+- [Rybbit Vulnerability Disclosure](https://apis.io/security/rybbit/rybbit-vulnerability-disclosure/)
 
-- **Human URL:** [https://rybbit.com/docs/api/getting-started](https://rybbit.com/docs/api/getting-started)
-- **Base URL:** `https://app.rybbit.io/api`
+#### OAuth scopes (1)
 
-#### Tags
+The permissions the API asks for.
 
-- Analytics
-- Stats
-- Events
-- Reporting
+- [Rybbit Scopes](https://apis.io/scopes/rybbit/rybbit-scopes/)
 
-#### Properties
+#### Plans and pricing (1)
 
-- [Documentation](https://rybbit.com/docs/api/getting-started)
-- [API Reference](https://rybbit.com/docs/api/stats/misc)
-- [OpenAPI](openapi/rybbit-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/rybbit.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/rybbit.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published plans, tiers and prices.
 
-### Rybbit Sessions & Retention API
+- [Rybbit Plans Pricing](https://apis.io/plans/rybbit/rybbit-plans-pricing/)
 
-Session-level analytics and cohort retention - paginated session lists, individual session detail, session locations, per-user session history, and cohort-based retention curves under /api/sites/:site.
+#### Rate limits (1)
 
-- **Human URL:** [https://rybbit.com/docs/api/stats/sessions](https://rybbit.com/docs/api/stats/sessions)
-- **Base URL:** `https://app.rybbit.io/api`
+Published request limits.
 
-#### Tags
+- [Rybbit Rate Limits](https://apis.io/rate-limits/rybbit/rybbit-rate-limits/)
 
-- Sessions
-- Retention
-- Cohorts
-- Users
+#### FinOps (1)
 
-#### Properties
+What the API costs to run, by operation.
 
-- [Documentation](https://rybbit.com/docs/api/stats/sessions)
-- [OpenAPI](openapi/rybbit-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/rybbit.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/rybbit.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Rybbit Finops](https://apis.io/finops/rybbit/rybbit-finops/)
 
-## Common Properties
+## Where to find this API
 
-- [GitHub Organization](https://github.com/rybbit-io)
-- [LinkedIn](https://www.linkedin.com/company/rybbit)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.rybbit.io)
 - [Documentation](https://rybbit.com/docs)
-- [Plans](plans/rybbit-plans-pricing.yml)
-- [Rate Limits](rate-limits/rybbit-rate-limits.yml)
-- [Fin Ops](finops/rybbit-finops.yml)
+- [Getting started](https://rybbit.com/docs/api/getting-started)
+- [API reference](https://rybbit.com/docs/api/getting-started)
+- [Pricing](https://rybbit.com/pricing)
+- [Sign up](https://app.rybbit.io/signup)
+- [Support](https://rybbit.com/contact)
+- [Changelog](https://github.com/rybbit-io/rybbit/releases)
+- [Blog](https://rybbit.io/blog)
+- [Security](https://rybbit.com/security)
+- [Compliance](https://rybbit.com/security)
+- [Terms of service](https://rybbit.com/terms-and-conditions)
+- [Privacy policy](https://rybbit.com/privacy)
+- [GitHub](https://github.com/rybbit-io)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 66.7** — exemplar · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 48.2 |
+| Contract governance | 18.2 |
+| Operational transparency | 60.5 |
+| Developer ergonomics | 74.4 |
+| Access clarity | 92.1 |
+
+**Agent readiness 46.3** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | paginated |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 45.1** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/rybbit/](https://apis.io/providers/rybbit/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Rybbit: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/rybbit/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
